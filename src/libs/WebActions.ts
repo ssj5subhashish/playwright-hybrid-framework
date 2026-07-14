@@ -32,15 +32,17 @@ class WebActions {
    */
   async forceClickElement(locator: string, timeout = config.waitForElement) {
     log.info(`[WebActions] Force-clicking element: ${locator}`);
-    // Wait for element to be in DOM (not necessarily visible)
-    await this.page.waitForSelector(locator, { state: 'attached', timeout });
-    await this.page.evaluate((sel) => {
-      const el = document.querySelector(sel) as HTMLElement;
-      if (el) {
+    const loc = this.page.locator(locator).first();
+    await loc.waitFor({ state: 'attached', timeout });
+    try {
+      await loc.scrollIntoViewIfNeeded();
+      await loc.click({ force: true, timeout: 5000 });
+    } catch (e) {
+      await loc.evaluate((el: HTMLElement) => {
         el.scrollIntoView({ block: 'center' });
         el.click();
-      }
-    }, locator);
+      });
+    }
   }
 
   /**
@@ -48,17 +50,20 @@ class WebActions {
    */
   async forceSetValue(locator: string, value: string, timeout = config.waitForElement) {
     log.info(`[WebActions] Force-setting value in element: ${locator}`);
-    await this.page.waitForSelector(locator, { state: 'attached', timeout });
-    await this.page.evaluate(({ sel, val }) => {
-      const el = document.querySelector(sel) as HTMLInputElement;
-      if (el) {
+    const loc = this.page.locator(locator).first();
+    await loc.waitFor({ state: 'attached', timeout });
+    try {
+      await loc.scrollIntoViewIfNeeded();
+      await loc.fill(value, { timeout: 5000 });
+    } catch (e) {
+      await loc.evaluate((el: HTMLInputElement, val: string) => {
         el.scrollIntoView({ block: 'center' });
         el.focus();
         el.value = val;
         el.dispatchEvent(new Event('input', { bubbles: true }));
         el.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    }, { sel: locator, val: value });
+      }, value);
+    }
   }
 
   /**

@@ -1,6 +1,6 @@
 class AirbnbMobileSearchPageObjects {
   // Mobile Home search trigger
-  MOBILE_SEARCH_BAR_TRIGGER = 'button[data-testid="search-bar-trigger"], [data-testid="search-input-field-query"], button:has-text("Where to?")';
+  MOBILE_SEARCH_BAR_TRIGGER = 'button[data-testid="search-bar-trigger"], [data-testid="search-input-field-query"], button:has-text("Where to?"), button:has-text("Start your search")';
   
   // Mobile Search Drawer input
   MOBILE_DESTINATION_INPUT = 'input[placeholder="Search destinations"], input[data-testid="search-input-field"], input[type="search"]';

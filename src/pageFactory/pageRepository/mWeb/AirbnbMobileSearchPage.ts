@@ -31,8 +31,13 @@ class AirbnbMobileSearchPage {
     await this.webActions.enterValue(inputSelector, city);
     await this.page.waitForTimeout(1200);
 
-    // Press enter or tap first suggestion
-    await this.webActions.pressKey('Enter');
+    // Select the first suggestion item if it appears, otherwise press Enter
+    try {
+      await this.page.waitForSelector(this.locators.MOBILE_SUGGESTION_ITEM, { state: 'attached', timeout: 4000 });
+      await this.webActions.forceClickElement(this.locators.MOBILE_SUGGESTION_ITEM);
+    } catch (e) {
+      await this.webActions.pressKey('Enter');
+    }
     await this.page.waitForTimeout(800);
 
     // Click 'Next' to advance to calendar if not auto-advanced
@@ -98,9 +103,27 @@ class AirbnbMobileSearchPage {
 
   async verifyResultsPageLoaded(): Promise<boolean> {
     try {
+      // Poll for the URL to change to the results page (/s/ route)
+      let urlMatched = false;
+      for (let i = 0; i < 25; i++) {
+        const currentUrl = this.page.url();
+        if (currentUrl.includes('/s/')) {
+          urlMatched = true;
+          break;
+        }
+        await this.page.waitForTimeout(1000);
+      }
+      if (!urlMatched) {
+        throw new Error(`URL did not change to results page. Current URL is: ${this.page.url()}`);
+      }
+
+      // Dismiss any popups or modals on the results page
+      await this.webActions.dismissBlockingOverlay();
+      // Confirm listing cards are visible on the results page
       await this.page.waitForSelector(this.locators.LISTING_CARDS, { state: 'visible', timeout: 20000 });
       return true;
-    } catch {
+    } catch (e: any) {
+      console.error(`[verifyResultsPageLoaded Failed]: ${e.message}`);
       return false;
     }
   }

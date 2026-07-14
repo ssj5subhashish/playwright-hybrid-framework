@@ -108,12 +108,28 @@ class AirbnbSearchPage {
 
   async verifyResultsPageLoaded(): Promise<boolean> {
     try {
-      // Verify we navigated to the search results URL (/s/ route)
-      await this.page.waitForURL(/airbnb\.com\/s\//, { timeout: 25000 });
+      // Poll for the URL to change to the results page (/s/ route)
+      let urlMatched = false;
+      for (let i = 0; i < 25; i++) {
+        const currentUrl = this.page.url();
+        if (currentUrl.includes('/s/')) {
+          urlMatched = true;
+          break;
+        }
+        await this.page.waitForTimeout(1000);
+      }
+      if (!urlMatched) {
+        throw new Error(`URL did not change to results page. Current URL is: ${this.page.url()}`);
+      }
+
+      // Dismiss any popups or modals on the results page (like the "All fees included" popup)
+      await this.webActions.dismissBlockingOverlay();
+      
       // Confirm listing cards are visible on the results page
       await this.page.waitForSelector(this.locators.LISTING_CARDS, { state: 'visible', timeout: 20000 });
       return true;
-    } catch {
+    } catch (e: any) {
+      console.error(`[verifyResultsPageLoaded Failed]: ${e.message}`);
       return false;
     }
   }

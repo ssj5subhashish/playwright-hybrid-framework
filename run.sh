@@ -14,8 +14,6 @@ echo "=============================================="
 # Run the test command corresponding to the selected suite
 if [ "$TEST_SUITE" = "web" ]; then
   npm run test:web
-elif [ "$TEST_SUITE" = "webLR" ]; then
-  npm run test:webLR
 elif [ "$TEST_SUITE" = "mWeb" ]; then
   npm run test:mWeb
 else

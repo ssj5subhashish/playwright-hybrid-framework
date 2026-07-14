@@ -33,7 +33,6 @@ on:
         options:
           - all
           - web
-          - webLR
           - mWeb
 
 jobs:
