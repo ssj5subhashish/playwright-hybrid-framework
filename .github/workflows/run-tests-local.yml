@@ -1,0 +1,78 @@
+name: Playwright Tests (Local Runner)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+      browser:
+        description: 'Browser type'
+        required: true
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - firefox
+          - safari
+      test_suite:
+        description: 'Test Suite to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - web
+          - webLR
+          - mWeb
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: playwright-hybrid-framework/package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          cd playwright-hybrid-framework
+          npm ci
+
+      - name: Install Playwright Browsers
+        run: |
+          cd playwright-hybrid-framework
+          npx playwright install --with-deps
+
+      - name: Run Automation Tests
+        run: |
+          cd playwright-hybrid-framework
+          npm run test:${{ github.event.inputs.test_suite || 'all' }}
+        env:
+          ENV: ${{ github.event.inputs.environment || 'qa' }}
+          BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
+          HEADLESS: 'true'
+
+      - name: Upload Mochawesome HTML Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mochawesome-reports
+          path: playwright-hybrid-framework/reports/
+          retention-days: 7

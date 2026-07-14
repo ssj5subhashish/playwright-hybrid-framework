@@ -1,0 +1,23 @@
+{
+  "chrome": {
+    "engine": "chromium",
+    "headless": false,
+    "args": [
+      "--window-size=1600,900",
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-web-security",
+      "--autoplay-policy=no-user-gesture-required"
+    ]
+  },
+  "firefox": {
+    "engine": "firefox",
+    "headless": false,
+    "args": []
+  },
+  "safari": {
+    "engine": "webkit",
+    "headless": false,
+    "args": []
+  }
+}

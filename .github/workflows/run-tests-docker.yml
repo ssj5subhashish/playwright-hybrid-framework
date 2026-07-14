@@ -1,0 +1,71 @@
+name: Playwright Tests (Dockerized)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+          - dev
+          - qa
+          - prod
+      browser:
+        description: 'Browser type'
+        required: true
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - firefox
+          - safari
+      test_suite:
+        description: 'Test Suite to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - web
+          - webLR
+          - mWeb
+
+jobs:
+  run-docker-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: |
+          cd playwright-hybrid-framework
+          docker build -t playwright-tests:latest .
+
+      - name: Run Tests in Docker Container
+        run: |
+          docker run --name test-container \
+            -e ENV=${{ github.event.inputs.environment || 'qa' }} \
+            -e BROWSER=${{ github.event.inputs.browser || 'chrome' }} \
+            -e HEADLESS=true \
+            -e TEST_SUITE=${{ github.event.inputs.test_suite || 'all' }} \
+            playwright-tests:latest
+
+      - name: Copy Reports from Docker Container
+        if: always()
+        run: |
+          docker cp test-container:/app/reports ./reports-export
+
+      - name: Upload Mochawesome HTML Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: docker-mochawesome-reports
+          path: ./reports-export
+          retention-days: 7
