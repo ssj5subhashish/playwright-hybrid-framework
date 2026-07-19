@@ -44,7 +44,6 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          cd playwright-hybrid-framework
           docker build -t playwright-tests:latest .
 
       - name: Run Tests in Docker Container

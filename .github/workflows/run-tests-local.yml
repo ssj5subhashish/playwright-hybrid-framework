@@ -47,21 +47,18 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: playwright-hybrid-framework/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Install Dependencies
         run: |
-          cd playwright-hybrid-framework
           npm ci
 
       - name: Install Playwright Browsers
         run: |
-          cd playwright-hybrid-framework
           npx playwright install --with-deps
 
       - name: Run Automation Tests
         run: |
-          cd playwright-hybrid-framework
           npm run test:${{ github.event.inputs.test_suite || 'all' }}
         env:
           ENV: ${{ github.event.inputs.environment || 'qa' }}
@@ -73,5 +70,5 @@ jobs:
         if: always()
         with:
           name: mochawesome-reports
-          path: playwright-hybrid-framework/reports/
+          path: reports/
           retention-days: 7

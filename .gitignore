@@ -7,3 +7,5 @@ result.txt
 env_file.txt
 screenshots/
 test-results/
+har/
+trace/

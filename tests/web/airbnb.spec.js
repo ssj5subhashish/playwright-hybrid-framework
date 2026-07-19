@@ -1,7 +1,8 @@
 const BrowserFactory = require('../../src/browsers/BrowserFactory.ts');
 const AirbnbSearchPage = require('../../src/pageFactory/pageRepository/web/AirbnbSearchPage.ts');
 const { config } = require('../../src/config/config.ts');
-const { expect } = require('chai');
+const { assert } = require('chai');
+const addContext = require('mochawesome/addContext');
 
 describe('[Web] Airbnb Guest Search Flow E2E Test Suite', function () {
   let page, browser, context;
@@ -9,44 +10,50 @@ describe('[Web] Airbnb Guest Search Flow E2E Test Suite', function () {
   const browserFactory = new BrowserFactory();
 
   before(async function () {
-    [page, browser, context] = await browserFactory.launchBrowser(config.environment.airbnbUrl);
+    browser = await browserFactory.launch();
+    context = await browser.newContext({
+      viewport: { width: 1600, height: 900 }
+    });
+    page = await context.newPage();
     airbnbPage = new AirbnbSearchPage(page);
+    await airbnbPage.webActions.startNetworkTracing();
+    await airbnbPage.webActions.startHarCapture();
   });
+
+  beforeEach(async function () {
+    await airbnbPage.navigate();
+  });
+
+  afterEach(async function () {
+    if (this.currentTest.state === 'failed') {
+      const testName = this.currentTest.title.replace(/[^a-zA-Z0-9]/g, '_');
+      const screenshotPath = await airbnbPage.webActions.takeScreenshot(testName);
+      addContext(this, `../../${screenshotPath}`);
+    }
+  })
 
   after(async function () {
-    if (browser) {
-      await browser.close();
+    try {
+      if (airbnbPage && airbnbPage.webActions) {
+        await airbnbPage.webActions.stopHarCapture(`GuestSearchFlow`).catch(err => console.error(err));
+        await airbnbPage.webActions.stopNetworkTracing(`GuestSearchFlow`).catch(err => console.error(err));
+      }
+    } finally {
+      if (browser) {
+        await browser.close();
+      }
     }
   });
 
-  it('should successfully search for stays as a guest user', async function () {
-    try {
-      // 1. Navigate to target URL and dismiss popups
-      await airbnbPage.navigate();
-      
-      // 2. Input search destination
-      await airbnbPage.searchDestination('Tokyo, Japan');
-      
-      // 3. Pick check-in (3 days from now) & check-out (7 days from now)
-      await airbnbPage.selectDates(3, 7);
-      
-      // 4. Click guest counter and add 2 Adults and 1 Child
-      await airbnbPage.addGuests(2, 1);
-      
-      // 5. Submit search query
-      await airbnbPage.clickSearch();
-      
-      // 6. Assert results page loads listings
-      const resultsLoaded = await airbnbPage.verifyResultsPageLoaded();
-      expect(resultsLoaded, 'Airbnb listings failed to load on the results page').to.be.true;
-      
-      // 7. Extract the first listing title to verify content is populated
-      const firstTitle = await airbnbPage.getFirstListingTitle();
-      console.log(`[Validation] First Listing Found: "${firstTitle}"`);
-      expect(firstTitle).to.not.be.empty;
-    } catch (err) {
-      await airbnbPage.webActions.takeScreenshot('airbnb_desktop_failure');
-      throw err;
-    }
+  it('Validate successful search for stays as a Guest user', async function () {
+    await airbnbPage.searchDestination('Tokyo, Japan');
+    await airbnbPage.selectDates(3, 7);
+    await airbnbPage.addGuests(2, 1);
+    await airbnbPage.clickSearch();
+    const resultsLoaded = await airbnbPage.verifyResultsPageLoaded();
+    assert.isTrue(resultsLoaded, 'Airbnb listings failed to load on the results page');
+    const firstTitle = await airbnbPage.getFirstListingTitle();
+    console.log(`[Validation] First Listing Found: "${firstTitle}"`);
+    assert.isTrue(firstTitle.length > 0, "The first title is Empty");
   });
 });

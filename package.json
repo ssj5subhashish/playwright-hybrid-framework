@@ -10,13 +10,14 @@
   "author": "Hotstar SDETs / Showcase",
   "license": "ISC",
   "dependencies": {
-    "playwright": "1.50.1",
     "chai": "^4.3.4",
+    "cross-env": "^7.0.3",
     "dotenv": "^14.2.0",
     "mochawesome": "^7.0.1",
     "mochawesome-report-generator": "^6.0.1",
-    "winston": "^3.2.1",
-    "cross-env": "^7.0.3"
+    "playwright": "1.50.1",
+    "playwright-har": "^0.2.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@types/chai": "^4.3.4",

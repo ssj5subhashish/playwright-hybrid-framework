@@ -1,12 +1,16 @@
 import { Page } from 'playwright';
+import { PlaywrightHar } from 'playwright-har';
 import log = require('../logger/logger');
 import { config } from '../config/config';
+import fs = require('fs');
 
 class WebActions {
   page: Page;
+  har: PlaywrightHar;
 
   constructor(page: Page) {
     this.page = page;
+    this.har = new PlaywrightHar(page as any);
   }
 
   /**
@@ -129,10 +133,53 @@ class WebActions {
   /**
    * Take full page screenshot
    */
-  async takeScreenshot(name: string) {
+  async takeScreenshot(name: string): Promise<string> {
     const screenshotPath = `screenshots/${name}_${Date.now()}.png`;
     log.info(`[WebActions] Capturing screenshot to: ${screenshotPath}`);
     await this.page.screenshot({ path: screenshotPath, fullPage: true });
+    return screenshotPath;
+  }
+
+  /**
+   * Start network tracing
+   */
+  async startNetworkTracing() {
+    log.info(`[WebActions] Starting Playwright Network tracing`);
+    await this.page.context().tracing.start({ screenshots: true, snapshots: true });
+  }
+
+  /**
+   * Stop network tracing and save the trace file
+   */
+  async stopNetworkTracing(testName: string) {
+    log.info(`[WebActions] Ending Playwright Network tracing`);
+    if (!fs.existsSync('trace')) {
+      fs.mkdirSync('trace', { recursive: true });
+    }
+    const tracePath = `trace/${testName}.zip`;
+    await this.page.context().tracing.stop({ path: tracePath });
+    log.info(`[WebActions] Trace saved to: ${tracePath}`);
+  }
+
+  /**
+  * Start HAR Capture
+  */
+  async startHarCapture() {
+    log.info(`[WebActions] Starting HAR capture`);
+    await this.har.start();
+  }
+
+  /**
+   * Stop HAR Capture and save the HAR file
+   */
+  async stopHarCapture(testName: string) {
+    log.info(`[WebActions] Ending HAR capture`);
+    if (!fs.existsSync('har')) {
+      fs.mkdirSync('har', { recursive: true });
+    }
+    const harPath = `har/${testName}.har`;
+    await this.har.stop(harPath);
+    log.info(`[WebActions] HAR file saved to: ${harPath}`);
   }
 }
 
