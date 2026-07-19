@@ -1,5 +1,5 @@
 name: Playwright Tests (Dockerized)
-run-name: Playwright Tests (Dockerized) - ${{ github.event.inputs.test_suite || 'all' }}
+run-name: Playwright Tests (Dockerized) - ${{ github.event.inputs.test_suite || 'All' }}
 
 on:
   workflow_dispatch:
@@ -25,18 +25,18 @@ on:
       test_suite:
         description: 'Test Suite to run'
         required: true
-        default: 'all'
+        default: 'All'
         type: choice
         options:
-          - all
-          - web
-          - mWeb
+          - All
+          - Web
+          - MWeb
 
 jobs:
   web-tests-docker:
     name: Desktop Web Tests (Docker)
     runs-on: ubuntu-latest
-    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'web' || github.event_name != 'workflow_dispatch'
+    if: github.event.inputs.test_suite == 'All' || github.event.inputs.test_suite == 'Web' || github.event_name != 'workflow_dispatch'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
@@ -86,7 +86,7 @@ jobs:
   mweb-tests-docker:
     name: Mobile Web Tests (Docker)
     runs-on: ubuntu-latest
-    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'mWeb' || github.event_name != 'workflow_dispatch'
+    if: github.event.inputs.test_suite == 'All' || github.event.inputs.test_suite == 'MWeb' || github.event_name != 'workflow_dispatch'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
