@@ -1,16 +1,16 @@
 import WebActions = require('../../../libs/WebActions');
-import AirbnbSearchPageObjects = require('../../objectRepository/web/AirbnbSearchPageObjects');
+import AirbnbHomepageObjects = require('../../objectRepository/web/AirbnbHomepageObjects');
 import { config } from '../../../config/config';
 
-class AirbnbSearchPage {
+class AirbnbHomepage {
   page: any;
   webActions: WebActions;
-  locators: AirbnbSearchPageObjects;
+  locators: AirbnbHomepageObjects;
 
   constructor(page: any) {
     this.page = page;
     this.webActions = new WebActions(page);
-    this.locators = new AirbnbSearchPageObjects();
+    this.locators = new AirbnbHomepageObjects();
   }
 
   async navigate() {
@@ -23,14 +23,65 @@ class AirbnbSearchPage {
     await this.page.waitForTimeout(500);
   }
 
+  async openUserMenu() {
+    await this.webActions.forceClickElement(this.locators.USER_MENU_TRIGGER);
+    await this.page.waitForTimeout(500);
+  }
+
+  async selectLoginOption() {
+    await this.webActions.forceClickElement(this.locators.LOGIN_MENU_ITEM);
+    await this.page.waitForTimeout(1000);
+  }
+
+  async selectSignupOption() {
+    await this.webActions.forceClickElement(this.locators.SIGNUP_MENU_ITEM);
+    await this.page.waitForTimeout(1000);
+  }
+
+  async changeLanguage() {
+    await this.webActions.forceClickElement(this.locators.LANGUAGE_PICKER_TRIGGER);
+    await this.page.waitForTimeout(1000);
+    if (await this.webActions.isElementVisible(this.locators.LANGUAGE_OPTION_EN)) {
+      await this.webActions.forceClickElement(this.locators.LANGUAGE_OPTION_EN);
+    } else {
+      await this.page.keyboard.press('Escape');
+    }
+    await this.page.waitForTimeout(1000);
+  }
+
+  async changeCurrency() {
+    await this.webActions.forceClickElement(this.locators.LANGUAGE_PICKER_TRIGGER);
+    await this.page.waitForTimeout(1000);
+    await this.webActions.forceClickElement(this.locators.CURRENCY_TAB);
+    await this.page.waitForTimeout(500);
+    if (await this.webActions.isElementVisible(this.locators.CURRENCY_OPTION_USD)) {
+      await this.webActions.forceClickElement(this.locators.CURRENCY_OPTION_USD);
+    } else {
+      await this.page.keyboard.press('Escape');
+    }
+    await this.page.waitForTimeout(1000);
+  }
+
+  async dismissInstallBanner() {
+    if (await this.webActions.isElementVisible(this.locators.CLOSE_INSTALL_APP_BANNER)) {
+      await this.webActions.forceClickElement(this.locators.CLOSE_INSTALL_APP_BANNER);
+      await this.page.waitForTimeout(500);
+    }
+  }
+
+  async clickUseApp() {
+    await this.webActions.forceClickElement(this.locators.USE_APP_BANNER_TRIGGER);
+    await this.page.waitForTimeout(1000);
+  }
+
+  // --- Search actions ---
   async searchDestination(city: string) {
-    // Click the destination input directly — force:true bypasses any residual overlay visibility issues
     await this.page.locator(this.locators.DESTINATION_INPUT).click({ force: true, timeout: 10000 });
     await this.page.waitForTimeout(500);
 
     // Type destination with realistic key delay so React's onChange fires
     await this.page.keyboard.type(city, { delay: 80 });
-    await this.page.waitForTimeout(2000); // Wait for suggestions to appear
+    await this.page.waitForTimeout(2000);
 
     // Select the first suggestion then confirm with Enter
     await this.page.keyboard.press('ArrowDown');
@@ -55,11 +106,9 @@ class AirbnbSearchPage {
     const checkInLocator = `button[data-state--date-string="${checkInDateStr}"]`;
     const checkOutLocator = `button[data-state--date-string="${checkOutDateStr}"]`;
 
-    // Wait for the calendar to be rendered in the DOM
     await this.page.waitForSelector(checkInLocator, { state: 'attached', timeout: 15000 });
     await this.page.waitForTimeout(300);
 
-    // Click dates with force to bypass any thin overlay layers on the calendar
     await this.page.locator(checkInLocator).click({ force: true });
     await this.page.waitForTimeout(600);
 
@@ -72,8 +121,6 @@ class AirbnbSearchPage {
   }
 
   async addGuests(adults: number, children: number) {
-    // Use JS to find and click "Add guests" button — bypasses Playwright locator ambiguity
-    // when multiple elements share the same aria-label across visible/hidden search bars
     await this.page.evaluate(() => {
       const btn = Array.from(document.querySelectorAll('button')).find(
         el => el.getAttribute('aria-label') === 'Add guests' && 
@@ -83,7 +130,6 @@ class AirbnbSearchPage {
     });
     await this.page.waitForTimeout(800);
 
-    // Stepper buttons may be rendered offscreen — use JS scrollIntoView + click
     for (let i = 0; i < adults; i++) {
       await this.page.evaluate((sel: string) => {
         const el = document.querySelector(sel) as HTMLElement;
@@ -101,6 +147,21 @@ class AirbnbSearchPage {
     }
   }
 
+  async selectFlexibleDates() {
+    await this.page.evaluate(() => {
+      const tabs = Array.from(document.querySelectorAll('button, [role="tab"]'));
+      const flexTab = tabs.find(el => el.textContent && el.textContent.toLowerCase().includes('flexible'));
+      if (flexTab) (flexTab as HTMLElement).click();
+    });
+    await this.page.waitForTimeout(500);
+  }
+
+  async clickLogoToHome() {
+    const homeLogo = this.page.locator('a[aria-label="Airbnb homepage"]').first();
+    await homeLogo.click({ force: true });
+    await this.page.waitForTimeout(2000);
+  }
+
   async clickSearch() {
     await this.page.locator(this.locators.SEARCH_BTN).click({ force: true });
     await this.page.waitForTimeout(1000);
@@ -108,7 +169,6 @@ class AirbnbSearchPage {
 
   async verifyResultsPageLoaded(): Promise<boolean> {
     try {
-      // Poll for the URL to change to the results page (/s/ route)
       let urlMatched = false;
       for (let i = 0; i < 25; i++) {
         const currentUrl = this.page.url();
@@ -122,10 +182,7 @@ class AirbnbSearchPage {
         throw new Error(`URL did not change to results page. Current URL is: ${this.page.url()}`);
       }
 
-      // Dismiss any popups or modals on the results page (like the "All fees included" popup)
       await this.webActions.dismissBlockingOverlay();
-      
-      // Confirm listing cards are visible on the results page
       await this.page.waitForSelector(this.locators.LISTING_CARDS, { state: 'visible', timeout: 20000 });
       return true;
     } catch (e: any) {
@@ -139,4 +196,4 @@ class AirbnbSearchPage {
   }
 }
 
-export = AirbnbSearchPage;
+export = AirbnbHomepage;
