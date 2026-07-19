@@ -86,6 +86,9 @@ jobs:
         if: always()
         run: |
           aws s3 sync reports/web s3://my-test-reports-ssj5s-264/web/run-${{ github.run_id }} --delete
+          echo "Test report uploaded successfully!"
+          echo "You can view the Desktop Web Report at: http://my-test-reports-ssj5s-264.s3-website-us-east-1.amazonaws.com/web/run-${{ github.run_id }}/"
+          echo "### :rocket: Desktop Web Report: http://my-test-reports-ssj5s-264.s3-website-us-east-1.amazonaws.com/web/run-${{ github.run_id }}/" >> $GITHUB_STEP_SUMMARY
 
   mweb-tests:
     name: Mobile Web Tests
@@ -138,3 +141,6 @@ jobs:
         if: always()
         run: |
           aws s3 sync reports/mWeb s3://my-test-reports-ssj5s-264/mWeb/run-${{ github.run_id }} --delete
+          echo "Test report uploaded successfully!"
+          echo "You can view the Mobile Web Report at: http://my-test-reports-ssj5s-264.s3-website-us-east-1.amazonaws.com/mWeb/run-${{ github.run_id }}/"
+          echo "### :rocket: Mobile Web Report: http://my-test-reports-ssj5s-264.s3-website-us-east-1.amazonaws.com/mWeb/run-${{ github.run_id }}/" >> $GITHUB_STEP_SUMMARY
