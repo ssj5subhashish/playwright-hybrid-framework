@@ -9,6 +9,9 @@ COPY package.json package-lock.json ./
 # Install npm packages (including devDependencies)
 RUN npm ci
 
+# Install Playwright browsers matching the installed library version
+RUN npx playwright install
+
 # Copy the rest of the project files
 COPY . .
 

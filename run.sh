@@ -11,6 +11,13 @@ echo " Headless:    ${HEADLESS:-true}               "
 echo " Test Suite:  ${TEST_SUITE}                   "
 echo "=============================================="
 
+echo "=== Docker Environment Diagnostics ==="
+echo "Playwright version:"
+npx playwright --version 2>&1 || echo "Failed to get Playwright version"
+echo "Contents of /ms-playwright:"
+ls -la /ms-playwright 2>&1 || echo "Failed to list /ms-playwright"
+echo "======================================"
+
 # Run the test command corresponding to the selected suite
 if [ "$TEST_SUITE" = "web" ]; then
   npm run test:web
