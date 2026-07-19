@@ -29,8 +29,8 @@ describe('[Web] Airbnb Homepage Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('Homepage_Web').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('Homepage_Web').catch(() => {});
+      await homepage.webActions.stopHarCapture('Homepage_Web');
+      await homepage.webActions.stopNetworkTracing('Homepage_Web');
     } finally {
       if (browser) {
         await browser.close();

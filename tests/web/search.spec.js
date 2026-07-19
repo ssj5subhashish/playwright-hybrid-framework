@@ -28,8 +28,8 @@ describe('[Web] Airbnb Search Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('Search_Web').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('Search_Web').catch(() => {});
+      await homepage.webActions.stopHarCapture('Search_Web');
+      await homepage.webActions.stopNetworkTracing('Search_Web');
     } finally {
       if (browser) {
         await browser.close();

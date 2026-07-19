@@ -33,8 +33,8 @@ describe('[MWeb] Airbnb Mobile Authentication Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('Auth_Mobile').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('Auth_Mobile').catch(() => {});
+      await homepage.webActions.stopHarCapture('Auth_Mobile');
+      await homepage.webActions.stopNetworkTracing('Auth_Mobile');
     } finally {
       if (browser) {
         await browser.close();

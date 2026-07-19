@@ -36,8 +36,8 @@ describe('[MWeb] Airbnb Mobile Wishlist & Share Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('WishlistShare_Mobile').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('WishlistShare_Mobile').catch(() => {});
+      await homepage.webActions.stopHarCapture('WishlistShare_Mobile');
+      await homepage.webActions.stopNetworkTracing('WishlistShare_Mobile');
     } finally {
       if (browser) {
         await browser.close();

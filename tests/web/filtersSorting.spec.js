@@ -32,7 +32,7 @@ describe('[Web] Airbnb Filters & Sorting Suite', function () {
       const searchUrl = `${domain}/s/Tokyo--Japan/homes?query=Tokyo%2C%20Japan`;
       await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
       await homepage.webActions.dismissBlockingOverlay();
-      await page.waitForSelector('div[data-testid="card-container"]', { timeout: 20000 }).catch(() => {});
+      await page.waitForSelector('div[data-testid="card-container"]', { timeout: 20000 });
     }
 
     searchResultsUrl = page.url();
@@ -48,8 +48,8 @@ describe('[Web] Airbnb Filters & Sorting Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('FiltersSorting_Web').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('FiltersSorting_Web').catch(() => {});
+      await homepage.webActions.stopHarCapture('FiltersSorting_Web');
+      await homepage.webActions.stopNetworkTracing('FiltersSorting_Web');
     } finally {
       if (browser) {
         await browser.close();
@@ -61,7 +61,7 @@ describe('[Web] Airbnb Filters & Sorting Suite', function () {
   async function goToResults() {
     await page.goto(searchResultsUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await homepage.webActions.dismissBlockingOverlay();
-    await page.waitForSelector('div[data-testid="card-container"]', { timeout: 15000 }).catch(() => {});
+    await page.waitForSelector('div[data-testid="card-container"]', { timeout: 15000 });
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(500);
   }

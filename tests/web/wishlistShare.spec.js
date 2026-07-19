@@ -37,8 +37,8 @@ describe('[Web] Airbnb Wishlist & Share Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('WishlistShare_Web').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('WishlistShare_Web').catch(() => {});
+      await homepage.webActions.stopHarCapture('WishlistShare_Web');
+      await homepage.webActions.stopNetworkTracing('WishlistShare_Web');
     } finally {
       if (browser) {
         await browser.close();

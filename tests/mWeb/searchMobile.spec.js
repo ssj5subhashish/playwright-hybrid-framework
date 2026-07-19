@@ -30,8 +30,8 @@ describe('[MWeb] Airbnb Mobile Search Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('Search_Mobile').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('Search_Mobile').catch(() => {});
+      await homepage.webActions.stopHarCapture('Search_Mobile');
+      await homepage.webActions.stopNetworkTracing('Search_Mobile');
     } finally {
       if (browser) {
         await browser.close();

@@ -29,7 +29,7 @@ describe('[Web] Airbnb Search Results Suite', function () {
       const searchUrl = `${domain}/s/Tokyo--Japan/homes?query=Tokyo%2C%20Japan`;
       await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
       await homepage.webActions.dismissBlockingOverlay();
-      await page.waitForSelector('div[data-testid="card-container"]', { timeout: 20000 }).catch(() => {});
+      await page.waitForSelector('div[data-testid="card-container"]', { timeout: 20000 });
     }
     // All tests chain from this search results page
   });
@@ -44,8 +44,8 @@ describe('[Web] Airbnb Search Results Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('SearchResults_Web').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('SearchResults_Web').catch(() => {});
+      await homepage.webActions.stopHarCapture('SearchResults_Web');
+      await homepage.webActions.stopNetworkTracing('SearchResults_Web');
     } finally {
       if (browser) {
         await browser.close();

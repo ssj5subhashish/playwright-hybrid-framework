@@ -37,8 +37,8 @@ describe('[MWeb] Airbnb Mobile Filters & Sorting Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('FiltersSorting_Mobile').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('FiltersSorting_Mobile').catch(() => {});
+      await homepage.webActions.stopHarCapture('FiltersSorting_Mobile');
+      await homepage.webActions.stopNetworkTracing('FiltersSorting_Mobile');
     } finally {
       if (browser) {
         await browser.close();

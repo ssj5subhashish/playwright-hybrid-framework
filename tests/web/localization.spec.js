@@ -31,8 +31,8 @@ describe('[Web] Airbnb Localization Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('Localization_Web').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('Localization_Web').catch(() => {});
+      await homepage.webActions.stopHarCapture('Localization_Web');
+      await homepage.webActions.stopNetworkTracing('Localization_Web');
     } finally {
       if (browser) {
         await browser.close();

@@ -35,8 +35,8 @@ describe('[Web] Airbnb Booking Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('Booking_Web').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('Booking_Web').catch(() => {});
+      await homepage.webActions.stopHarCapture('Booking_Web');
+      await homepage.webActions.stopNetworkTracing('Booking_Web');
     } finally {
       if (browser) {
         await browser.close();

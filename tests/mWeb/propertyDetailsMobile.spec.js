@@ -17,6 +17,8 @@ describe('[MWeb] Airbnb Mobile Property Details Suite', function () {
     [page, browser, context] = await browserFactory.launchMobileBrowser(config.environment.airbnbUrl, 'iPhone 12');
     homepage = new AirbnbMobileHomepage(page);
     searchResults = new AirbnbMobileSearchResults(page);
+    await homepage.webActions.startNetworkTracing();
+    await homepage.webActions.startHarCapture();
     await homepage.navigate();
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
@@ -40,11 +42,12 @@ describe('[MWeb] Airbnb Mobile Property Details Suite', function () {
 
   after(async function () {
     try {
+      await homepage.webActions.stopHarCapture('PropertyDetails_Mobile');
+      await homepage.webActions.stopNetworkTracing('PropertyDetails_Mobile');
       if (browser) {
         await browser.close();
       }
     } finally {
-      /* ignore */
     }
   });
 

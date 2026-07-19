@@ -19,6 +19,8 @@ describe('[Web] Airbnb Property Details Suite', function () {
     page = await context.newPage();
     homepage = new AirbnbHomepage(page);
     searchResults = new AirbnbSearchResults(page);
+    await homepage.webActions.startNetworkTracing();
+    await homepage.webActions.startHarCapture();
     await homepage.navigate();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
@@ -44,6 +46,8 @@ describe('[Web] Airbnb Property Details Suite', function () {
 
   after(async function () {
     try {
+      await homepage.webActions.stopHarCapture('PropertyDetails_Web');
+      await homepage.webActions.stopNetworkTracing('PropertyDetails_Web');
       if (detailPage) { await detailPage.close(); }
     } finally {
       if (browser) {

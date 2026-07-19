@@ -35,8 +35,8 @@ describe('[Web] Airbnb Authentication Suite', function () {
 
   after(async function () {
     try {
-      await homepage.webActions.stopHarCapture('Auth_Web').catch(() => {});
-      await homepage.webActions.stopNetworkTracing('Auth_Web').catch(() => {});
+      await homepage.webActions.stopHarCapture('Auth_Web');
+      await homepage.webActions.stopNetworkTracing('Auth_Web');
     } finally {
       if (browser) {
         await browser.close();
