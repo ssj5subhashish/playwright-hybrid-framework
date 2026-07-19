@@ -16,11 +16,14 @@ class AirbnbMobileSearchPageObjects {
   CHILDREN_INCREASE_BTN = 'button[data-testid="stepper-children-increase-button"]';
   
   // Mobile Search submit
-  MOBILE_SEARCH_SUBMIT_BTN = 'button[data-testid="search-drawer-search-button"], button:has-text("Search")';
+  MOBILE_SEARCH_SUBMIT_BTN = 'button[data-testid="explore-footer-primary-btn"], button:text("Search")';
   
   // Results view
   LISTING_CARDS = 'div[data-testid="card-container"]';
   LISTING_TITLES = 'div[data-testid="listing-card-title"]';
+
+  //Install App
+  CLOSE_INSTALL_APP = '//div[@data-testid="app-install-container"]//button[@aria-label="Close"]';
 }
 
 export = AirbnbMobileSearchPageObjects;

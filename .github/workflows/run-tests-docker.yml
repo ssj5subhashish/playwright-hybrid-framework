@@ -36,8 +36,10 @@ on:
           - mWeb
 
 jobs:
-  run-docker-tests:
+  web-tests-docker:
+    name: Desktop Web Tests (Docker)
     runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'web' || github.event_name != 'workflow_dispatch'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -52,18 +54,52 @@ jobs:
             -e ENV=${{ github.event.inputs.environment || 'qa' }} \
             -e BROWSER=${{ github.event.inputs.browser || 'chrome' }} \
             -e HEADLESS=true \
-            -e TEST_SUITE=${{ github.event.inputs.test_suite || 'all' }} \
+            -e TEST_SUITE=web \
             playwright-tests:latest
 
       - name: Copy Reports from Docker Container
         if: always()
         run: |
-          docker cp test-container:/app/reports ./reports-export
+          docker cp test-container:/app/reports/web ./reports-export
 
       - name: Upload Mochawesome HTML Reports
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: docker-mochawesome-reports
+          name: web-docker-mochawesome-reports
+          path: ./reports-export
+          retention-days: 7
+
+  mweb-tests-docker:
+    name: Mobile Web Tests (Docker)
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'mWeb' || github.event_name != 'workflow_dispatch'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build -t playwright-tests:latest .
+
+      - name: Run Tests in Docker Container
+        run: |
+          docker run --name test-container \
+            -e ENV=${{ github.event.inputs.environment || 'qa' }} \
+            -e BROWSER=${{ github.event.inputs.browser || 'chrome' }} \
+            -e HEADLESS=true \
+            -e TEST_SUITE=mWeb \
+            playwright-tests:latest
+
+      - name: Copy Reports from Docker Container
+        if: always()
+        run: |
+          docker cp test-container:/app/reports/mWeb ./reports-export
+
+      - name: Upload Mochawesome HTML Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mweb-docker-mochawesome-reports
           path: ./reports-export
           retention-days: 7

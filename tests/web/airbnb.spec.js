@@ -3,6 +3,7 @@ const AirbnbSearchPage = require('../../src/pageFactory/pageRepository/web/Airbn
 const { config } = require('../../src/config/config.ts');
 const { assert } = require('chai');
 const addContext = require('mochawesome/addContext');
+const testLog = require('../../src/logger/logger.ts');
 
 describe('[Web] Airbnb Guest Search Flow E2E Test Suite', function () {
   let page, browser, context;
@@ -53,7 +54,7 @@ describe('[Web] Airbnb Guest Search Flow E2E Test Suite', function () {
     const resultsLoaded = await airbnbPage.verifyResultsPageLoaded();
     assert.isTrue(resultsLoaded, 'Airbnb listings failed to load on the results page');
     const firstTitle = await airbnbPage.getFirstListingTitle();
-    console.log(`[Validation] First Listing Found: "${firstTitle}"`);
+    testLog.info(`[Validation] First Listing Found: "${firstTitle}"`);
     assert.isTrue(firstTitle.length > 0, "The first title is Empty");
   });
 });

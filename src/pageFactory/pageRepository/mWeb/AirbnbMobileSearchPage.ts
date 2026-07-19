@@ -21,9 +21,13 @@ class AirbnbMobileSearchPage {
   }
 
   async searchDestination(city: string) {
+    // Wait for the mobile search bar trigger to be attached
+    await this.page.waitForSelector(this.locators.MOBILE_SEARCH_BAR_TRIGGER, { state: 'attached', timeout: 10000 });
+    await this.page.waitForTimeout(1000);
+    
     // Force-click mobile search bar trigger to open the search drawer
     await this.webActions.forceClickElement(this.locators.MOBILE_SEARCH_BAR_TRIGGER);
-    await this.page.waitForTimeout(800);
+    await this.page.waitForTimeout(1500);
 
     // Type destination in input
     const inputSelector = this.locators.MOBILE_DESTINATION_INPUT;
@@ -39,15 +43,6 @@ class AirbnbMobileSearchPage {
       await this.webActions.pressKey('Enter');
     }
     await this.page.waitForTimeout(800);
-
-    // Click 'Next' to advance to calendar if not auto-advanced
-    try {
-      if (await this.webActions.isElementVisible(this.locators.NEXT_STEP_BTN, 2000)) {
-        await this.webActions.forceClickElement(this.locators.NEXT_STEP_BTN);
-      }
-    } catch (e) {
-      // Auto-advanced
-    }
   }
 
   async selectDates(checkInOffset: number, checkOutOffset: number) {
@@ -66,13 +61,13 @@ class AirbnbMobileSearchPage {
     const checkInLocator = `button[data-state--date-string="${checkInDateStr}"]`;
     const checkOutLocator = `button[data-state--date-string="${checkOutDateStr}"]`;
 
-    // Force-click check-in date (bypasses overlaying modal)
+    // Force-click check-in date
     await this.webActions.forceClickElement(checkInLocator);
-    await this.page.waitForTimeout(600);
+    await this.page.waitForTimeout(800);
 
     // Force-click check-out date
     await this.webActions.forceClickElement(checkOutLocator);
-    await this.page.waitForTimeout(600);
+    await this.page.waitForTimeout(800);
 
     // Advance to guest picker
     try {
@@ -130,6 +125,10 @@ class AirbnbMobileSearchPage {
 
   async getFirstListingTitle(): Promise<string> {
     return await this.webActions.getText(this.locators.LISTING_TITLES);
+  }
+
+  async closeInstallApp() {
+    await this.webActions.forceClickElement(this.locators.CLOSE_INSTALL_APP);
   }
 }
 

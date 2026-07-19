@@ -36,8 +36,10 @@ on:
           - mWeb
 
 jobs:
-  run-tests:
+  web-tests:
+    name: Desktop Web Tests
     runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'web' || github.event_name != 'workflow_dispatch'
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -57,9 +59,9 @@ jobs:
         run: |
           npx playwright install --with-deps
 
-      - name: Run Automation Tests
+      - name: Run Automation Tests (Web)
         run: |
-          npm run test:${{ github.event.inputs.test_suite || 'all' }}
+          npm run test:web
         env:
           ENV: ${{ github.event.inputs.environment || 'qa' }}
           BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
@@ -69,6 +71,45 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: mochawesome-reports
-          path: reports/
+          name: web-mochawesome-reports
+          path: reports/web
+          retention-days: 7
+
+  mweb-tests:
+    name: Mobile Web Tests
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'mWeb' || github.event_name != 'workflow_dispatch'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install Dependencies
+        run: |
+          npm ci
+
+      - name: Install Playwright Browsers
+        run: |
+          npx playwright install --with-deps
+
+      - name: Run Automation Tests (mWeb)
+        run: |
+          npm run test:mWeb
+        env:
+          ENV: ${{ github.event.inputs.environment || 'qa' }}
+          BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
+          HEADLESS: 'true'
+
+      - name: Upload Mochawesome HTML Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mweb-mochawesome-reports
+          path: reports/mWeb
           retention-days: 7
