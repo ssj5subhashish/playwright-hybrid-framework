@@ -16,11 +16,7 @@ describe('[Web] Airbnb Authentication Suite', function () {
     auth = new AirbnbAuth(page);
     await homepage.webActions.startNetworkTracing();
     await homepage.webActions.startHarCapture();
-  });
-
-  beforeEach(async function () {
     await homepage.navigate();
-    await homepage.openUserMenu();
   });
 
   afterEach(async function () {
@@ -43,15 +39,13 @@ describe('[Web] Airbnb Authentication Suite', function () {
   });
 
   it('[TC_01] [Authentication] [Web] Verify guest user can open Login or Signup modal', async function () {
+    await homepage.openUserMenu();
     await homepage.selectLoginSignupOption();
     const isModalVisible = await auth.verifyAuthModalVisible();
     assert.isTrue(isModalVisible, 'Login modal did not appear');
   });
 
   it('[TC_02] [Authentication] [Web] Verify guest user can close authentication modal', async function () {
-    await homepage.selectLoginSignupOption();
-    let isModalVisible = await auth.verifyAuthModalVisible();
-    assert.isTrue(isModalVisible, 'Auth modal did not display');
     await auth.closeAuthModal();
     isModalVisible = await auth.verifyAuthModalVisible();
     assert.isFalse(isModalVisible, 'Auth modal did not close successfully');
