@@ -14,9 +14,7 @@ describe('[Web] Airbnb Booking Suite', function () {
   const browserFactory = new BrowserFactory();
 
   before(async function () {
-    browser = await browserFactory.launch();
-    context = await browser.newContext({ viewport: { width: 1600, height: 900 } });
-    page = await context.newPage();
+    [page, browser, context] = await browserFactory.launch();
     homepage = new AirbnbHomepage(page);
     searchResults = new AirbnbSearchResults(page);
     auth = new AirbnbAuth(page);

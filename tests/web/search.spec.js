@@ -9,9 +9,7 @@ describe('[Web] Airbnb Search Suite', function () {
   const browserFactory = new BrowserFactory();
 
   before(async function () {
-    browser = await browserFactory.launch();
-    context = await browser.newContext({ viewport: { width: 1600, height: 900 } });
-    page = await context.newPage();
+    [page, browser, context] = await browserFactory.launch();
     homepage = new AirbnbHomepage(page);
     await homepage.webActions.startNetworkTracing();
     await homepage.webActions.startHarCapture();
