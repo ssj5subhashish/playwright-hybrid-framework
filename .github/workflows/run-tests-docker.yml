@@ -42,7 +42,7 @@ jobs:
     if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'web' || github.event_name != 'workflow_dispatch'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Build Docker Image
         run: |
@@ -63,7 +63,7 @@ jobs:
           docker cp test-container:/app/reports/web ./reports-export
 
       - name: Upload Mochawesome HTML Reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: web-docker-mochawesome-reports
@@ -76,7 +76,7 @@ jobs:
     if: github.event.inputs.test_suite == 'all' || github.event.inputs.test_suite == 'mWeb' || github.event_name != 'workflow_dispatch'
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Build Docker Image
         run: |
@@ -97,7 +97,7 @@ jobs:
           docker cp test-container:/app/reports/mWeb ./reports-export
 
       - name: Upload Mochawesome HTML Reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: mweb-docker-mochawesome-reports
