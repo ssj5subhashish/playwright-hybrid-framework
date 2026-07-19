@@ -1,8 +1,7 @@
 class AirbnbHomepageObjects {
   // User profile menu selectors
-  USER_MENU_TRIGGER = 'button[data-testid="header-profile-menu-button"]';
-  LOGIN_MENU_ITEM = 'div[data-testid="menu-item-login"], a[data-testid="header-profile-menu-login"], div:text("Log in")';
-  SIGNUP_MENU_ITEM = 'div[data-testid="menu-item-signup"], div:text("Sign up")';
+  USER_MENU_TRIGGER = 'button[data-testid="cypress-headernav-profile"]';
+  LOGIN_SIGNUP_MENU_ITEM = 'div[data-testid="guest-header-dropdownmenu"]//span[text()="Log in or sign up"]';
 
   // Home logo
   HOME_LOGO = 'a[aria-label="Airbnb homepage"]';

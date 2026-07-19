@@ -18,7 +18,11 @@ describe('[Web] Airbnb Authentication Suite', function () {
     auth = new AirbnbAuth(page);
     await homepage.webActions.startNetworkTracing();
     await homepage.webActions.startHarCapture();
+  });
+
+  beforeEach(async function () {
     await homepage.navigate();
+    await homepage.openUserMenu();
   });
 
   afterEach(async function () {
@@ -40,31 +44,16 @@ describe('[Web] Airbnb Authentication Suite', function () {
     }
   });
 
-  // T1: Open login modal, verify it appears, then close it
-  it('[TC_01] [Authentication] [Web] Verify guest user can open login modal', async function () {
-    await homepage.openUserMenu();
-    await homepage.selectLoginOption();
+  it('[TC_01] [Authentication] [Web] Verify guest user can open Login or Signup modal', async function () {
+    await homepage.selectLoginSignupOption();
     const isModalVisible = await auth.verifyAuthModalVisible();
     assert.isTrue(isModalVisible, 'Login modal did not appear');
-    await auth.closeAuthModal(); // Close so T2 can chain on homepage
   });
 
-  // T2: Chain from T1 (homepage with modal closed) — open signup modal
-  it('[TC_02] [Authentication] [Web] Verify guest user can open signup modal', async function () {
-    await homepage.openUserMenu();
-    await homepage.selectSignupOption();
-    const isModalVisible = await auth.verifyAuthModalVisible();
-    assert.isTrue(isModalVisible, 'Signup modal did not appear');
-    await auth.closeAuthModal(); // Close so T3 can chain
-  });
-
-  // T3: Chain from T2 (homepage with modal closed) — verify close flow
-  it('[TC_03] [Authentication] [Web] Verify guest user can close authentication modal', async function () {
-    await homepage.openUserMenu();
-    await homepage.selectLoginOption();
+  it('[TC_02] [Authentication] [Web] Verify guest user can close authentication modal', async function () {
+    await homepage.selectLoginSignupOption();
     let isModalVisible = await auth.verifyAuthModalVisible();
     assert.isTrue(isModalVisible, 'Auth modal did not display');
-
     await auth.closeAuthModal();
     isModalVisible = await auth.verifyAuthModalVisible();
     assert.isFalse(isModalVisible, 'Auth modal did not close successfully');

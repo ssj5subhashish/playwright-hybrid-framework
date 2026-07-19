@@ -28,13 +28,8 @@ class AirbnbHomepage {
     await this.page.waitForTimeout(500);
   }
 
-  async selectLoginOption() {
-    await this.webActions.forceClickElement(this.locators.LOGIN_MENU_ITEM);
-    await this.page.waitForTimeout(1000);
-  }
-
-  async selectSignupOption() {
-    await this.webActions.forceClickElement(this.locators.SIGNUP_MENU_ITEM);
+  async selectLoginSignupOption() {
+    await this.webActions.forceClickElement(this.locators.LOGIN_SIGNUP_MENU_ITEM);
     await this.page.waitForTimeout(1000);
   }
 
