@@ -67,6 +67,24 @@ jobs:
           path: ./reports-export
           retention-days: 7
 
+      - name: Upload Trace Files
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: web-docker-traces
+          path: ./reports-export/trace
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload HAR Files
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: web-docker-hars
+          path: ./reports-export/har
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
         if: always()
@@ -116,6 +134,24 @@ jobs:
           name: mweb-docker-mochawesome-reports
           path: ./reports-export
           retention-days: 7
+
+      - name: Upload Trace Files
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: mweb-docker-traces
+          path: ./reports-export/trace
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload HAR Files
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: mweb-docker-hars
+          path: ./reports-export/har
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6

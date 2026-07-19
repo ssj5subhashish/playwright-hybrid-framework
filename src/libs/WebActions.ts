@@ -164,10 +164,13 @@ class WebActions {
   async stopNetworkTracing(testName: string) {
     log.info(`[WebActions] Ending Playwright Network tracing`);
     try {
-      if (!fs.existsSync('trace')) {
-        fs.mkdirSync('trace', { recursive: true });
+      const suite = process.env.TEST_SUITE || 'web';
+      const traceDir = `reports/${suite}/trace`;
+      if (!fs.existsSync(traceDir)) {
+        fs.mkdirSync(traceDir, { recursive: true });
       }
-      const tracePath = `trace/${testName}.zip`;
+      const timestamp = Date.now();
+      const tracePath = `${traceDir}/${testName}_${timestamp}.zip`;
       await this.page.context().tracing.stop({ path: tracePath });
       log.info(`[WebActions] Trace saved to: ${tracePath}`);
     } catch (e) {
@@ -179,11 +182,13 @@ class WebActions {
   * Start HAR Capture
   */
   async startHarCapture() {
-    log.info(`[WebActions] Starting HAR capture`);
-    try {
-      await this.har.start();
-    } catch (e) {
-      log.error(`[WebActions] Failed to start HAR capture`, e);
+    if (config.browser === 'chrome') {
+      log.info(`[WebActions] Starting HAR capture`);
+      try {
+        await this.har.start();
+      } catch (e) {
+        log.error(`[WebActions] Failed to start HAR capture`, e);
+      }
     }
   }
 
@@ -191,16 +196,21 @@ class WebActions {
    * Stop HAR Capture and save the HAR file
    */
   async stopHarCapture(testName: string) {
-    log.info(`[WebActions] Ending HAR capture`);
-    try {
-      if (!fs.existsSync('har')) {
-        fs.mkdirSync('har', { recursive: true });
+    if (config.browser === 'chrome') {
+      log.info(`[WebActions] Ending HAR capture`);
+      try {
+        const suite = process.env.TEST_SUITE || 'web';
+        const harDir = `reports/${suite}/har`;
+        if (!fs.existsSync(harDir)) {
+          fs.mkdirSync(harDir, { recursive: true });
+        }
+        const timestamp = Date.now();
+        const harPath = `${harDir}/${testName}_${timestamp}.har`;
+        await this.har.stop(harPath);
+        log.info(`[WebActions] HAR file saved to: ${harPath}`);
+      } catch (e) {
+        log.error(`[WebActions] Failed to stop HAR capture`, e);
       }
-      const harPath = `har/${testName}.har`;
-      await this.har.stop(harPath);
-      log.info(`[WebActions] HAR file saved to: ${harPath}`);
-    } catch (e) {
-      log.error(`[WebActions] Failed to stop HAR capture`, e);
     }
   }
 }
