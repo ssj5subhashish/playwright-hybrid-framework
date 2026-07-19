@@ -55,6 +55,6 @@ describe('[Web] Airbnb Guest Search Flow E2E Test Suite', function () {
     assert.isTrue(resultsLoaded, 'Airbnb listings failed to load on the results page');
     const firstTitle = await airbnbPage.getFirstListingTitle();
     testLog.info(`[Validation] First Listing Found: "${firstTitle}"`);
-    assert.isFalse(firstTitle.length > 0, "The first title is Empty");
+    assert.isTrue(firstTitle.length > 0, "The first title is Empty");
   });
 });
