@@ -1,9 +1,8 @@
 name: Playwright Tests (Dockerized)
+run-name: Playwright Tests (Dockerized) - ${{ github.event.inputs.test_suite || 'all' }}
 
 on:
   push:
-    branches: [ main, master ]
-  pull_request:
     branches: [ main, master ]
   workflow_dispatch:
     inputs:
