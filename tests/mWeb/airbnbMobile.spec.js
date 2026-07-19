@@ -26,7 +26,7 @@ describe('[MWeb] Airbnb Mobile Guest Search Flow E2E Test Suite', function () {
     if (this.currentTest.state === 'failed') {
       const testName = this.currentTest.title.replace(/[^a-zA-Z0-9]/g, '_');
       const screenshotPath = await airbnbMobilePage.webActions.takeScreenshot(testName);
-      addContext(this, `../../${screenshotPath}`);
+      addContext(this, screenshotPath);
     }
   });
 

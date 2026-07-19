@@ -29,7 +29,7 @@ describe('[Web] Airbnb Guest Search Flow E2E Test Suite', function () {
     if (this.currentTest.state === 'failed') {
       const testName = this.currentTest.title.replace(/[^a-zA-Z0-9]/g, '_');
       const screenshotPath = await airbnbPage.webActions.takeScreenshot(testName);
-      addContext(this, `../../${screenshotPath}`);
+      addContext(this, screenshotPath);
     }
   })
 
@@ -55,6 +55,6 @@ describe('[Web] Airbnb Guest Search Flow E2E Test Suite', function () {
     assert.isTrue(resultsLoaded, 'Airbnb listings failed to load on the results page');
     const firstTitle = await airbnbPage.getFirstListingTitle();
     testLog.info(`[Validation] First Listing Found: "${firstTitle}"`);
-    assert.isFalse(firstTitle.length > 0, "The first title is Empty");
+    assert.isTrue(firstTitle.length > 0, "The first title is Empty");
   });
 });

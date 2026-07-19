@@ -134,10 +134,16 @@ class WebActions {
    * Take full page screenshot
    */
   async takeScreenshot(name: string): Promise<string> {
-    const screenshotPath = `screenshots/${name}_${Date.now()}.png`;
+    const suite = process.env.TEST_SUITE || 'web';
+    const screenshotDir = `reports/${suite}/screenshots`;
+    if (!fs.existsSync(screenshotDir)) {
+      fs.mkdirSync(screenshotDir, { recursive: true });
+    }
+    const filename = `${name}_${Date.now()}.png`;
+    const screenshotPath = `${screenshotDir}/${filename}`;
     log.info(`[WebActions] Capturing screenshot to: ${screenshotPath}`);
     await this.page.screenshot({ path: screenshotPath, fullPage: true });
-    return screenshotPath;
+    return `screenshots/${filename}`;
   }
 
   /**
