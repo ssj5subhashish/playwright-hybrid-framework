@@ -39,11 +39,11 @@ describe('[MWeb] Airbnb Mobile-Specific Features Suite', function () {
     }
   });
 
-  it('Verify guest user can dismiss app install banner', async function () {
+  it('[TC_01] [MWebSpecific] [MWeb] Verify guest user can dismiss app install banner', async function () {
     await homepage.dismissInstallBanner();
   });
 
-  it('Verify guest user can open property details from MWeb search results', async function () {
+  it('[TC_02] [MWebSpecific] [MWeb] Verify guest user can open property details from MWeb search results', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
@@ -58,7 +58,7 @@ describe('[MWeb] Airbnb Mobile-Specific Features Suite', function () {
     assert.isTrue(title.length > 0, 'Failed to view listing details on mobile');
   });
 
-  it('Verify guest user can reserve a property from MWeb and is prompted to login', async function () {
+  it('[TC_03] [MWebSpecific] [MWeb] Verify guest user can reserve a property from MWeb and is prompted to login', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
@@ -78,7 +78,7 @@ describe('[MWeb] Airbnb Mobile-Specific Features Suite', function () {
     }
   });
 
-  it('Verify guest user can click the Use App banner to redirect', async function () {
+  it('[TC_04] [MWebSpecific] [MWeb] Verify guest user can click the Use App banner to redirect', async function () {
     await homepage.clickUseApp();
   });
 });

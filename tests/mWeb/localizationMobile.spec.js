@@ -39,13 +39,13 @@ describe('[MWeb] Airbnb Mobile Localization Suite', function () {
     }
   });
 
-  it('Verify guest user can change language on mobile', async function () {
+  it('[TC_01] [Localization] [MWeb] Verify guest user can change language on mobile', async function () {
     await homepage.changeLanguage();
     const title = await page.title();
     assert.isTrue(title.length > 0, 'Homepage failed to refresh language on mobile');
   });
 
-  it('Verify guest user can change currency on mobile', async function () {
+  it('[TC_02] [Localization] [MWeb] Verify guest user can change currency on mobile', async function () {
     await homepage.changeCurrency();
     const title = await page.title();
     assert.isTrue(title.length > 0, 'Homepage failed to refresh currency on mobile');

@@ -42,7 +42,7 @@ describe('[MWeb] Airbnb Mobile Navigation Suite', function () {
     }
   });
 
-  it('Verify guest user can navigate between Home and Search pages on mobile', async function () {
+  it('[TC_01] [Navigation] [MWeb] Verify guest user can navigate between Home and Search pages on mobile', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
@@ -58,7 +58,7 @@ describe('[MWeb] Airbnb Mobile Navigation Suite', function () {
     }
   });
 
-  it('Verify guest user can use browser back navigation on mobile', async function () {
+  it('[TC_02] [Navigation] [MWeb] Verify guest user can use browser back navigation on mobile', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
@@ -70,7 +70,7 @@ describe('[MWeb] Airbnb Mobile Navigation Suite', function () {
     assert.isTrue(title.includes('Airbnb') || title.includes('Vacation Rentals'), 'Back navigation failed on mobile');
   });
 
-  it('Verify guest user can refresh search results without errors on mobile', async function () {
+  it('[TC_03] [Navigation] [MWeb] Verify guest user can refresh search results without errors on mobile', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();

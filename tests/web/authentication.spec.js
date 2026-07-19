@@ -18,7 +18,7 @@ describe('[Web] Airbnb Authentication Suite', function () {
     auth = new AirbnbAuth(page);
     await homepage.webActions.startNetworkTracing();
     await homepage.webActions.startHarCapture();
-    await homepage.navigate(); // Navigate once — auth tests chain on the same homepage
+    await homepage.navigate();
   });
 
   afterEach(async function () {
@@ -41,7 +41,7 @@ describe('[Web] Airbnb Authentication Suite', function () {
   });
 
   // T1: Open login modal, verify it appears, then close it
-  it('Verify guest user can open login modal', async function () {
+  it('[TC_01] [Authentication] [Web] Verify guest user can open login modal', async function () {
     await homepage.openUserMenu();
     await homepage.selectLoginOption();
     const isModalVisible = await auth.verifyAuthModalVisible();
@@ -50,7 +50,7 @@ describe('[Web] Airbnb Authentication Suite', function () {
   });
 
   // T2: Chain from T1 (homepage with modal closed) — open signup modal
-  it('Verify guest user can open signup modal', async function () {
+  it('[TC_02] [Authentication] [Web] Verify guest user can open signup modal', async function () {
     await homepage.openUserMenu();
     await homepage.selectSignupOption();
     const isModalVisible = await auth.verifyAuthModalVisible();
@@ -59,7 +59,7 @@ describe('[Web] Airbnb Authentication Suite', function () {
   });
 
   // T3: Chain from T2 (homepage with modal closed) — verify close flow
-  it('Verify guest user can close authentication modal', async function () {
+  it('[TC_03] [Authentication] [Web] Verify guest user can close authentication modal', async function () {
     await homepage.openUserMenu();
     await homepage.selectLoginOption();
     let isModalVisible = await auth.verifyAuthModalVisible();

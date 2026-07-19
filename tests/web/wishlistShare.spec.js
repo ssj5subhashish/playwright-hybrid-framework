@@ -46,7 +46,7 @@ describe('[Web] Airbnb Wishlist & Share Suite', function () {
     }
   });
 
-  it('Verify guest user is prompted to log in when saving a property', async function () {
+  it('[TC_01] [WishlistShare] [Web] Verify guest user is prompted to log in when saving a property', async function () {
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();
@@ -59,7 +59,7 @@ describe('[Web] Airbnb Wishlist & Share Suite', function () {
     assert.isTrue(isModalVisible, 'Guest was not prompted to log in when saving a property');
   });
 
-  it('Verify guest user can share a property listing', async function () {
+  it('[TC_02] [WishlistShare] [Web] Verify guest user can share a property listing', async function () {
     await searchPage.searchDestination('Tokyo, Japan');
     await searchPage.clickSearch();
     await searchPage.verifyResultsPageLoaded();

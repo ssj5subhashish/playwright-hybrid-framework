@@ -38,14 +38,12 @@ describe('[Web] Airbnb Homepage Suite', function () {
     }
   });
 
-  // T1: Homepage is already loaded from before() — just verify title
-  it('Verify guest user can launch Airbnb homepage', async function () {
+  it('[TC_01] [Homepage] [Web] Verify guest user can launch Airbnb homepage', async function () {
     const title = await page.title();
     assert.isTrue(title.includes('Airbnb') || title.includes('Vacation Rentals'), 'Homepage title does not include Airbnb');
   });
 
-  // T2: Chain on T1 — already on homepage, search and verify results
-  it('Verify guest user can navigate using the homepage search', async function () {
+  it('[TC_02] [Homepage] [Web] Verify guest user can navigate using the homepage search', async function () {
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
     const isResultsLoaded = await homepage.verifyResultsPageLoaded();

@@ -42,13 +42,13 @@ describe('[MWeb] Airbnb Mobile Authentication Suite', function () {
     }
   });
 
-  it('Verify guest user can open login modal on mobile', async function () {
+  it('[TC_01] [Authentication] [MWeb] Verify guest user can open login modal on mobile', async function () {
     await homepage.openUserMenu();
     const isModalVisible = await auth.verifyAuthModalVisible();
     assert.isTrue(isModalVisible, 'Login modal did not appear on mobile');
   });
 
-  it('Verify guest user can close authentication modal on mobile', async function () {
+  it('[TC_02] [Authentication] [MWeb] Verify guest user can close authentication modal on mobile', async function () {
     await homepage.openUserMenu();
     let isModalVisible = await auth.verifyAuthModalVisible();
     assert.isTrue(isModalVisible, 'Login modal did not display on mobile');

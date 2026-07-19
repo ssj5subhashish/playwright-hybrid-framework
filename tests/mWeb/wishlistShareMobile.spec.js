@@ -45,7 +45,7 @@ describe('[MWeb] Airbnb Mobile Wishlist & Share Suite', function () {
     }
   });
 
-  it('Verify guest user is prompted to log in when saving a property on mobile', async function () {
+  it('[TC_01] [WishlistShare] [MWeb] Verify guest user is prompted to log in when saving a property on mobile', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
@@ -57,7 +57,7 @@ describe('[MWeb] Airbnb Mobile Wishlist & Share Suite', function () {
     assert.isTrue(isModalVisible, 'Guest was not prompted to log in when saving on mobile');
   });
 
-  it('Verify guest user can share a property listing on mobile', async function () {
+  it('[TC_02] [WishlistShare] [MWeb] Verify guest user can share a property listing on mobile', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();

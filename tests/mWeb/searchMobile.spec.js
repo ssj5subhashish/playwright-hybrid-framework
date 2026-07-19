@@ -39,7 +39,7 @@ describe('[MWeb] Airbnb Mobile Search Suite', function () {
     }
   });
 
-  it('Verify guest user can search stays using destination, dates, and guests on mobile', async function () {
+  it('[TC_01] [Search] [MWeb] Verify guest user can search stays using destination, dates, and guests on mobile', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.selectDates(3, 7);

@@ -53,14 +53,12 @@ describe('[Web] Airbnb Search Results Suite', function () {
     }
   });
 
-  // T1: Verify listings are visible on results page
-  it('Verify guest user can view search results', async function () {
+  it('[TC_01] [SearchResults] [Web] Verify guest user can view search results', async function () {
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'No listing cards found in search results');
   });
 
-  // T2: Toggle map view and back — chains from T1 (still on results page)
-  it('Verify guest user can switch between list and map view', async function () {
+  it('[TC_02] [SearchResults] [Web] Verify guest user can switch between list and map view', async function () {
     await searchResults.toggleMapView(); // Switch to Map
     const toggleBtnText = await searchResults.getMapToggleText();
     assert.isTrue(
@@ -73,15 +71,13 @@ describe('[Web] Airbnb Search Results Suite', function () {
     assert.isTrue(firstTitle.length > 0, 'Failed to toggle back to list view successfully');
   });
 
-  // T3: Scroll results — chains from T2 (back on list view)
-  it('Verify guest user can scroll through search results', async function () {
+  it('[TC_03] [SearchResults] [Web] Verify guest user can scroll through search results', async function () {
     await searchResults.scrollResults();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Scroll failed or broke listings view');
   });
 
-  // T4: Open a property from results — chains from T3 (still on results page)
-  it('Verify guest user can open a property from search results', async function () {
+  it('[TC_04] [SearchResults] [Web] Verify guest user can open a property from search results', async function () {
     const [newPage] = await Promise.all([
       context.waitForEvent('page'),
       searchResults.openListing(0)

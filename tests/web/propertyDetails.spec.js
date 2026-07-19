@@ -52,36 +52,36 @@ describe('[Web] Airbnb Property Details Suite', function () {
     }
   });
 
-  it('Verify guest user can view property details', async function () {
+  it('[TC_01] [PropertyDetails] [Web] Verify guest user can view property details', async function () {
     const title = await propertyDetails.getPropertyTitle();
     assert.isTrue(title.length > 0, 'Property detail page failed to show listing title');
   });
 
-  it('Verify guest user can browse property image gallery', async function () {
+  it('[TC_02] [PropertyDetails] [Web] Verify guest user can browse property image gallery', async function () {
     await propertyDetails.openImageGallery();
     // Verify it opened and we can close it
     await propertyDetails.closeImageGallery();
   });
 
-  it('Verify guest user can view property amenities', async function () {
+  it('[TC_03] [PropertyDetails] [Web] Verify guest user can view property amenities', async function () {
     await propertyDetails.viewAmenities();
     // Escape standard full-screen amenities overlay if it opens
     await detailPage.keyboard.press('Escape');
   });
 
-  it('Verify guest user can view availability calendar', async function () {
+  it('[TC_04] [PropertyDetails] [Web] Verify guest user can view availability calendar', async function () {
     await propertyDetails.viewAvailability();
   });
 
-  it('Verify guest user can view pricing breakdown', async function () {
+  it('[TC_05] [PropertyDetails] [Web] Verify guest user can view pricing breakdown', async function () {
     await propertyDetails.getPricingBreakdown();
   });
 
-  it('Verify guest user can view host information', async function () {
+  it('[TC_06] [PropertyDetails] [Web] Verify guest user can view host information', async function () {
     await propertyDetails.viewHostInformation();
   });
 
-  it('Verify guest user can read property reviews', async function () {
+  it('[TC_07] [PropertyDetails] [Web] Verify guest user can read property reviews', async function () {
     await propertyDetails.readReviews();
     await detailPage.keyboard.press('Escape');
   });

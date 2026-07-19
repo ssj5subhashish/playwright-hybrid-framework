@@ -43,7 +43,7 @@ describe('[MWeb] Airbnb Mobile Search Results Suite', function () {
     }
   });
 
-  it('Verify guest user can view search results on mobile', async function () {
+  it('[TC_01] [SearchResults] [MWeb] Verify guest user can view search results on mobile', async function () {
     const title = await homepage.getFirstListingTitle();
     assert.isTrue(title.length > 0, 'No listings found in mobile search results');
   });

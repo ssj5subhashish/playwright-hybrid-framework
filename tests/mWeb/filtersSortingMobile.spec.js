@@ -46,39 +46,39 @@ describe('[MWeb] Airbnb Mobile Filters & Sorting Suite', function () {
     }
   });
 
-  it('Verify guest user can apply price filter on mobile', async function () {
+  it('[TC_01] [FiltersSorting] [MWeb] Verify guest user can apply price filter on mobile', async function () {
     await searchResults.applyPriceFilter('50', '250');
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Price filter did not return results on mobile');
   });
 
-  it('Verify guest user can apply room type filter on mobile', async function () {
+  it('[TC_02] [FiltersSorting] [MWeb] Verify guest user can apply room type filter on mobile', async function () {
     await searchResults.applyRoomTypeFilter();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Room type filter did not return results on mobile');
   });
 
-  it('Verify guest user can apply amenities filter on mobile', async function () {
+  it('[TC_03] [FiltersSorting] [MWeb] Verify guest user can apply amenities filter on mobile', async function () {
     await searchResults.applyAmenitiesFilter();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Amenities filter did not return results on mobile');
   });
 
-  it('Verify guest user can apply multiple filters on mobile', async function () {
+  it('[TC_04] [FiltersSorting] [MWeb] Verify guest user can apply multiple filters on mobile', async function () {
     await searchResults.applyRoomTypeFilter();
     await searchResults.applyAmenitiesFilter();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Multiple filters did not return results on mobile');
   });
 
-  it('Verify guest user can clear all applied filters on mobile', async function () {
+  it('[TC_05] [FiltersSorting] [MWeb] Verify guest user can clear all applied filters on mobile', async function () {
     await searchResults.applyRoomTypeFilter();
     await searchResults.clearAllFilters();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Clearing filters broke the results view on mobile');
   });
 
-  it('Verify guest user can sort search results on mobile', async function () {
+  it('[TC_06] [FiltersSorting] [MWeb] Verify guest user can sort search results on mobile', async function () {
     await searchResults.sortResults();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Sorting did not execute successfully on mobile');

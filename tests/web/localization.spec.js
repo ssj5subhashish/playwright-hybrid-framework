@@ -40,13 +40,13 @@ describe('[Web] Airbnb Localization Suite', function () {
     }
   });
 
-  it('Verify guest user can change language', async function () {
+  it('[TC_01] [Localization] [Web] Verify guest user can change language', async function () {
     await homepage.changeLanguage();
     const title = await page.title();
     assert.isTrue(title.length > 0, 'Homepage failed to refresh language');
   });
 
-  it('Verify guest user can change currency', async function () {
+  it('[TC_02] [Localization] [Web] Verify guest user can change currency', async function () {
     await homepage.changeCurrency();
     const title = await page.title();
     assert.isTrue(title.length > 0, 'Homepage failed to refresh currency');

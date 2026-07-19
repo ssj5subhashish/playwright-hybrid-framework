@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Showcase hybrid Playwright framework (TypeScript Page Object Model, JavaScript tests, Mochawesome reporting, Chai assertions).",
   "scripts": {
+    "test:local": "cross-env TEST_SUITE=web mocha \"tests/web/**/*.spec.js\" --timeout 120000 --reporter mochawesome --require ts-node/register --require mochawesome/register --reporter-options reportDir=reports/web,reportFilename=report,json=true,html=true --grep ",
     "test:web": "cross-env TEST_SUITE=web mocha \"tests/web/**/*.spec.js\" --timeout 120000 --reporter mochawesome --require ts-node/register --require mochawesome/register --reporter-options reportDir=reports/web,reportFilename=report,json=true,html=true --exit",
     "test:mWeb": "cross-env TEST_SUITE=mWeb mocha \"tests/mWeb/**/*.spec.js\" --timeout 120000 --reporter mochawesome --require ts-node/register --require mochawesome/register --reporter-options reportDir=reports/mWeb,reportFilename=report,json=true,html=true --exit",
     "test:all": "npm run test:web && npm run test:mWeb"

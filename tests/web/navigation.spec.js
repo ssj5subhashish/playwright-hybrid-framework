@@ -40,8 +40,7 @@ describe('[Web] Airbnb Navigation Suite', function () {
     }
   });
 
-  // T1: Navigate to results then click logo to return to homepage
-  it('Verify guest user can navigate between Home and Search pages', async function () {
+  it('[TC_01] [Navigation] [Web] Verify guest user can navigate between Home and Search pages', async function () {
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
     let isResultsLoaded = await homepage.verifyResultsPageLoaded();
@@ -52,8 +51,7 @@ describe('[Web] Airbnb Navigation Suite', function () {
     assert.isTrue(title.includes('Airbnb') || title.includes('Vacation Rentals'), 'Failed to return to Homepage');
   });
 
-  // T2: Search then use browser back button — chains from T1 (on homepage)
-  it('Verify guest user can use browser back navigation', async function () {
+  it('[TC_02] [Navigation] [Web] Verify guest user can use browser back navigation', async function () {
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();
@@ -64,8 +62,7 @@ describe('[Web] Airbnb Navigation Suite', function () {
     assert.isTrue(title.includes('Airbnb') || title.includes('Vacation Rentals'), 'Back navigation failed');
   });
 
-  // T3: Search then refresh the results page — chains from T2 (on homepage)
-  it('Verify guest user can refresh search results without errors', async function () {
+  it('[TC_03] [Navigation] [Web] Verify guest user can refresh search results without errors', async function () {
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();

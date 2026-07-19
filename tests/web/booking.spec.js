@@ -44,8 +44,7 @@ describe('[Web] Airbnb Booking Suite', function () {
     }
   });
 
-  // Single test: full flow from homepage → search → open listing → reserve → verify login prompt
-  it('Verify guest user can initiate reservation and is prompted to log in', async function () {
+  it('[TC_01] [Booking] [Web] Verify guest user can initiate reservation and is prompted to log in', async function () {
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();

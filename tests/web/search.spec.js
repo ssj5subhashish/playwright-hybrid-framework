@@ -37,16 +37,14 @@ describe('[Web] Airbnb Search Suite', function () {
     }
   });
 
-  // T1: On homepage from before() — search by destination
-  it('Verify guest user can search stays by destination', async function () {
+  it('[TC_01] [Search] [Web] Verify guest user can search stays by destination', async function () {
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
     const isResultsLoaded = await homepage.verifyResultsPageLoaded();
     assert.isTrue(isResultsLoaded, 'Stays results failed to load by destination');
   });
 
-  // T2: Chain on T1 results — modify search to a different city
-  it('Verify guest user can modify search criteria from search results', async function () {
+  it('[TC_02] [Search] [Web] Verify guest user can modify search criteria from search results', async function () {
     const searchHeader = page.locator('button[data-testid="header-search-menu-button"], [data-testid="little-search"], button:has-text("Tokyo")').first();
     await searchHeader.click({ force: true });
     await page.waitForTimeout(1500);
@@ -57,8 +55,7 @@ describe('[Web] Airbnb Search Suite', function () {
     assert.isTrue(isResultsLoaded, 'Stays results failed to load modified search');
   });
 
-  // T3: Navigate to homepage internally — search with destination, dates, and guests
-  it('Verify guest user can search stays using destination, dates, and guests', async function () {
+  it('[TC_03] [Search] [Web] Verify guest user can search stays using destination, dates, and guests', async function () {
     await homepage.navigate();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.selectDates(3, 7);
@@ -68,8 +65,7 @@ describe('[Web] Airbnb Search Suite', function () {
     assert.isTrue(isResultsLoaded, 'Stays results failed to load using destination, dates, and guests');
   });
 
-  // T4: Navigate to homepage internally — search without selecting dates
-  it('Verify guest user can search without selecting dates', async function () {
+  it('[TC_04] [Search] [Web] Verify guest user can search without selecting dates', async function () {
     await homepage.navigate();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.addGuests(2, 0);
@@ -78,8 +74,7 @@ describe('[Web] Airbnb Search Suite', function () {
     assert.isTrue(isResultsLoaded, 'Stays results failed to load without selecting dates');
   });
 
-  // T5: Navigate to homepage internally — select flexible dates then search
-  it('Verify guest user can search using flexible dates', async function () {
+  it('[TC_05] [Search] [Web] Verify guest user can search using flexible dates', async function () {
     await homepage.navigate();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.selectFlexibleDates();

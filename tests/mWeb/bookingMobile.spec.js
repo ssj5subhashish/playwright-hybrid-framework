@@ -40,7 +40,7 @@ describe('[MWeb] Airbnb Mobile Booking Suite', function () {
     }
   });
 
-  it('Verify guest user can initiate reservation and is prompted to log in on mobile', async function () {
+  it('[TC_01] [Booking] [MWeb] Verify guest user can initiate reservation and is prompted to log in on mobile', async function () {
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();

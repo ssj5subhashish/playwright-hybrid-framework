@@ -48,34 +48,34 @@ describe('[MWeb] Airbnb Mobile Property Details Suite', function () {
     }
   });
 
-  it('Verify guest user can view property details on mobile', async function () {
+  it('[TC_01] [PropertyDetails] [MWeb] Verify guest user can view property details on mobile', async function () {
     const title = await propertyDetails.getPropertyTitle();
     assert.isTrue(title.length > 0, 'Listing details failed to show title on mobile');
   });
 
-  it('Verify guest user can browse property image gallery on mobile', async function () {
+  it('[TC_02] [PropertyDetails] [MWeb] Verify guest user can browse property image gallery on mobile', async function () {
     await propertyDetails.openImageGallery();
     await propertyDetails.closeImageGallery();
   });
 
-  it('Verify guest user can view property amenities on mobile', async function () {
+  it('[TC_03] [PropertyDetails] [MWeb] Verify guest user can view property amenities on mobile', async function () {
     await propertyDetails.viewAmenities();
     await page.keyboard.press('Escape');
   });
 
-  it('Verify guest user can view availability calendar on mobile', async function () {
+  it('[TC_04] [PropertyDetails] [MWeb] Verify guest user can view availability calendar on mobile', async function () {
     await propertyDetails.viewAvailability();
   });
 
-  it('Verify guest user can view pricing breakdown on mobile', async function () {
+  it('[TC_05] [PropertyDetails] [MWeb] Verify guest user can view pricing breakdown on mobile', async function () {
     await propertyDetails.getPricingBreakdown();
   });
 
-  it('Verify guest user can view host information on mobile', async function () {
+  it('[TC_06] [PropertyDetails] [MWeb] Verify guest user can view host information on mobile', async function () {
     await propertyDetails.viewHostInformation();
   });
 
-  it('Verify guest user can read property reviews on mobile', async function () {
+  it('[TC_07] [PropertyDetails] [MWeb] Verify guest user can read property reviews on mobile', async function () {
     await propertyDetails.readReviews();
     await page.keyboard.press('Escape');
   });

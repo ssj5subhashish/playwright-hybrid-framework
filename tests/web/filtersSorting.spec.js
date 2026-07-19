@@ -66,34 +66,28 @@ describe('[Web] Airbnb Filters & Sorting Suite', function () {
     await page.waitForTimeout(500);
   }
 
-  // ── Tests — each starts from a clean results page, applies its filter, and asserts ──
-
-  it('Verify guest user can apply price filter', async function () {
-    // Begin from clean results, apply price filter
+  it('[TC_01] [FiltersSorting] [Web] Verify guest user can apply price filter', async function () {
     await goToResults();
     await searchResults.applyPriceFilter('800', '150000');
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Applying price filter failed or broke results');
   });
 
-  it('Verify guest user can apply room type filter', async function () {
-    // Begin from clean results, apply Entire home room type filter
+  it('[TC_02] [FiltersSorting] [Web] Verify guest user can apply room type filter', async function () {
     await goToResults();
     await searchResults.applyRoomTypeFilter();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Applying room type filter failed');
   });
 
-  it('Verify guest user can apply amenities filter', async function () {
-    // Begin from clean results, apply an amenity filter
+  it('[TC_03] [FiltersSorting] [Web] Verify guest user can apply amenities filter', async function () {
     await goToResults();
     await searchResults.applyAmenitiesFilter();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Applying amenities filter failed');
   });
 
-  it('Verify guest user can apply multiple filters', async function () {
-    // Begin from clean results, apply room type then an amenity filter
+  it('[TC_04] [FiltersSorting] [Web] Verify guest user can apply multiple filters', async function () {
     await goToResults();
     await searchResults.applyRoomTypeFilter();
     await searchResults.applyAmenitiesFilter();
@@ -101,8 +95,7 @@ describe('[Web] Airbnb Filters & Sorting Suite', function () {
     assert.isTrue(firstTitle.length > 0, 'Applying multiple filters simultaneously failed');
   });
 
-  it('Verify guest user can clear all applied filters', async function () {
-    // Begin with a filter applied, then clear and verify full results return
+  it('[TC_05] [FiltersSorting] [Web] Verify guest user can clear all applied filters', async function () {
     await goToResults();
     await searchResults.applyRoomTypeFilter();
     await searchResults.clearAllFilters();
@@ -110,8 +103,7 @@ describe('[Web] Airbnb Filters & Sorting Suite', function () {
     assert.isTrue(firstTitle.length > 0, 'Clearing all filters broke the results list');
   });
 
-  it('Verify guest user can sort search results', async function () {
-    // Begin from clean results and apply sorting
+  it('[TC_06] [FiltersSorting] [Web] Verify guest user can sort search results', async function () {
     await goToResults();
     await searchResults.sortResults();
     const firstTitle = await searchResults.getFirstListingTitle();

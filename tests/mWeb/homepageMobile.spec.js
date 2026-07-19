@@ -39,12 +39,12 @@ describe('[MWeb] Airbnb Mobile Homepage Suite', function () {
     }
   });
 
-  it('Verify guest user can launch Airbnb homepage on mobile', async function () {
+  it('[TC_01] [Homepage] [MWeb] Verify guest user can launch Airbnb homepage on mobile', async function () {
     const title = await page.title();
     assert.isTrue(title.includes('Airbnb') || title.includes('Vacation Rentals'), 'Mobile homepage title does not match');
   });
 
-  it('Verify guest user can dismiss app install banner on mobile homepage', async function () {
+  it('[TC_02] [Homepage] [MWeb] Verify guest user can dismiss app install banner on mobile homepage', async function () {
     await homepage.dismissInstallBanner();
   });
 });
