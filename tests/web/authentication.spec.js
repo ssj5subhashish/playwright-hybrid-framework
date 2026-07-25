@@ -45,9 +45,17 @@ describe('[Web] Airbnb Authentication Suite', function () {
     assert.isTrue(isModalVisible, 'Login modal did not appear');
   });
 
-  it('[TC_02] [Authentication] [Web] Verify guest user can close authentication modal', async function () {
+  it('[TC_02] [Authentication] [Web] Verify guest user can use fresh email to signup', async function () {
+    const email = await auth.webActions.generateRandomEmail();
+    await auth.enterPhoneOrEmail(email);
+    await auth.clickContinueButton();
+    const isSecurityOrOTPModalVisible = await auth.verifySecurityOrOTPModalVisible();
+    assert.isTrue(isSecurityOrOTPModalVisible, 'Security or OTP modal did not appear');
+  });
+
+  it('[TC_03] [Authentication] [Web] Verify guest user can close authentication modal', async function () {
     await auth.closeAuthModal();
-    isModalVisible = await auth.verifyAuthModalVisible();
+    const isModalVisible = await auth.verifyAuthModalVisible();
     assert.isFalse(isModalVisible, 'Auth modal did not close successfully');
   });
 });

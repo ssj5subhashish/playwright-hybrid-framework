@@ -72,23 +72,28 @@ class WebActions {
 
   /**
    * Dismiss any modal/overlay that is blocking UI interactions.
-   * Targets only the promo modal - does NOT disable pointer-events broadly
-   * to avoid breaking the search bar header.
+   * Waits for the promo dialog to appear, waits for the close button to be visible,
+   * clicks it to close, and checks if it is actually closed.
    */
-  async dismissBlockingOverlay() {
+  async dismissBlockingOverlay(timeout = 5000) {
     log.info('[WebActions] Attempting to dismiss blocking overlay...');
+    const dialog = this.page.locator('div[role="dialog"]').filter({
+      has: this.page.locator('button[aria-label="Close"]')
+    }).first();
     try {
-      await this.page.keyboard.press('Escape');
-      await this.page.waitForTimeout(400);
-      await this.page.evaluate(() => {
-        // Hide only the promo modal dialog (e.g. "Get 10% off your next stay")
-        // Do NOT disable pointer-events on fixed elements — that breaks the search header
-        document.querySelectorAll('[data-testid="modal-container"]').forEach(el => {
-          (el as HTMLElement).style.display = 'none';
-        });
-      });
-      await this.page.waitForTimeout(400);
-    } catch (e) { /* ignore */ }
+      log.info(`[WebActions] Waiting up to ${timeout}ms for the promo dialog to appear...`);
+      await dialog.waitFor({ state: 'visible', timeout });
+      log.info('[WebActions] Dialog appeared. Waiting for the close button to be visible...');
+      const closeBtn = dialog.locator('button[aria-label="Close"]').first();
+      await closeBtn.waitFor({ state: 'visible', timeout: 3000 });
+      log.info('[WebActions] Clicking the Close button...');
+      await closeBtn.click();
+      log.info('[WebActions] Verifying if the dialog is successfully closed...');
+      await dialog.waitFor({ state: 'hidden', timeout: 5000 });
+      log.info('[WebActions] Dialog is successfully closed.');
+    } catch (e) {
+      log.info(`[WebActions] No blocking overlay dialog was dismissed: ${(e as Error).message}`);
+    }
   }
 
   /**
@@ -212,6 +217,16 @@ class WebActions {
         log.error(`[WebActions] Failed to stop HAR capture`, e);
       }
     }
+  }
+
+  /**
+   * Generate Random Email
+   */
+  async generateRandomEmail(): Promise<string> {
+    log.info(`[WebActions] Generating random email`);
+    const timestamp = Date.now();
+    const email = `test_${timestamp}@example.com`;
+    return email;
   }
 }
 
