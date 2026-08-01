@@ -74,14 +74,33 @@ class AirbnbPropertyDetails {
 
   /** Returns true if the login/auth prompt is visible (for guest reservation flows) */
   async verifyLoginPromptVisible(): Promise<boolean> {
-    return await this.page
-      .locator('input[id="email"], input[id="phoneNumber"], div[data-testid="modal-container"]')
-      .first()
-      .isVisible();
+    return await this.page.locator(this.locators.LOGIN_STEP).isVisible();
   }
 
   async getPropertyTitle(): Promise<string> {
     return await this.webActions.getText(this.locators.PROPERTY_TITLE);
+  }
+
+  async verifyTranslateDialog() {
+    return await this.page.locator(this.locators.TRANSLATE_HEADING).isVisible();
+  }
+
+  async closeTranslateDialogIfVisible(){
+    const isVisible = await this.verifyTranslateDialog();
+    if (isVisible) {
+      await this.webActions.forceClickElement(this.locators.TRANSLATE_CLOSE_BTN);
+    }
+  }
+
+  async verifyChooseYourApartmentDialog(){
+    return await this.page.locator(this.locators.CHOOSE_YOUR_APARTMENT_TITLE).isVisible();
+  }
+
+  async clickNextOnChooseYourApartmentDialogIfVisible(){
+    const isVisible = await this.verifyChooseYourApartmentDialog();
+    if (isVisible) {
+      await this.webActions.forceClickElement(this.locators.CHOOSE_YOUR_APARTMENT_NEXT_BTN);
+    }
   }
 }
 

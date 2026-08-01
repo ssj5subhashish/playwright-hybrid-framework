@@ -21,8 +21,20 @@ class AirbnbPropertyDetailsObjects {
   REVIEWS_TRIGGER_BTN = 'button:has-text("reviews"), button[data-testid="reviews-trigger"]';
 
   // PDP Actions
-  RESERVE_BTN = 'button[data-testid="homes-pdp-cta-btn"], button:has-text("Reserve"), a:has-text("Reserve")';
+  RESERVE_BTN = '//button[@data-testid="homes-pdp-cta-btn"]';
   SHARE_BTN = 'button:has-text("Share"), button[data-testid="share-button"]';
+
+  // Translation Dialog
+  TRANSLATE_HEADING = '//header[@data-testid="translation-announce-modal"]/following-sibling::div//h1[text()="Translation on"]';
+  TRANSLATE_CLOSE_BTN = '//div[@role="dialog"][.//header[@data-testid="translation-announce-modal"]]//button[@aria-label="Close"]';
+
+  // Choose your Apartment Dialog
+  CHOOSE_YOUR_APARTMENT_TITLE = '//div[@role="dialog" and @aria-label="Choose your apartment"]';
+  CHOOSE_YOUR_APARTMENT_NEXT_BTN = '//div[@role="dialog" and @aria-label="Choose your apartment"]//button[.//span[normalize-space()="Next"]]';
+
+  // Confirm and Pay Steps
+  LOGIN_STEP = '//div[@data-testid="checkout-step-0-log-in-or-sign-up"]';
+  
 }
 
 export = AirbnbPropertyDetailsObjects;

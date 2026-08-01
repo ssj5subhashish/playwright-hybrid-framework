@@ -47,14 +47,13 @@ describe('[Web] Airbnb Booking Suite', function () {
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();
 
-    const [detailPage] = await Promise.all([
-      context.waitForEvent('page'),
-      searchResults.openListing(0)
-    ]);
+    const [detailPage] = await Promise.all([context.waitForEvent('page'), searchResults.openListing(0)]);
     await detailPage.waitForLoadState();
     const details = new AirbnbPropertyDetails(detailPage);
 
+    await details.closeTranslateDialogIfVisible();
     await details.clickReserveButton();
+    await details.clickNextOnChooseYourApartmentDialogIfVisible();
     const isLoginVisible = await details.verifyLoginPromptVisible();
     assert.isTrue(isLoginVisible, 'Guest was not prompted to authenticate when initiating booking reservation');
     await detailPage.close();
