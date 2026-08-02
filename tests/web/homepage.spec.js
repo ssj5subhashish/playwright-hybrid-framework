@@ -13,7 +13,6 @@ describe('[Web] Airbnb Homepage Suite', function () {
     homepage = new AirbnbHomepage(page);
     await homepage.webActions.startNetworkTracing();
     await homepage.webActions.startHarCapture();
-    // Navigate once — tests chain from this point
     await homepage.navigate();
   });
 
