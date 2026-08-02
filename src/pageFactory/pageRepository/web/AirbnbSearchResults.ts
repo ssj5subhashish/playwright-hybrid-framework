@@ -177,6 +177,10 @@ class AirbnbSearchResults {
     await this.clickApplyInDialog();
   }
 
+  async areFiltersApplied(): Promise<boolean> {
+    return await this.webActions.isElementVisible(this.locators.FILTERS_APPLIED, 1000);
+  }
+
   async clickSaveListing(index: number = 0) {
     const list = this.page.locator(this.locators.SAVE_LISTING_HEART);
     await list.nth(index).scrollIntoViewIfNeeded();

@@ -17,10 +17,11 @@ class AirbnbSearchResultsObjects {
   
   // Amenities filter checkboxes / buttons
   AMENITY_WIFI = 'div[role="dialog"] button:has-text("Washing machine"), button:has-text("Washing machine"), button:has-text("Wifi")';
-  
+
   // Apply and Clear actions
   APPLY_FILTERS_BTN = 'div[role="dialog"] footer button:has-text("Show"), button:has-text("Show "):has-text("place"), button:has-text("Show "):has-text("home")';
   CLEAR_ALL_FILTERS_BTN = 'div[role="dialog"] button:has-text("Clear all"), button:has-text("Clear all")';
+  FILTERS_APPLIED = '//button[starts-with(@aria-label,"Filters,") and contains(@aria-label,"applied")]';
 
   // Sorting
   SORT_TRIGGER_BTN = 'button[data-testid="sort-trigger"], button:has-text("Sort")';
