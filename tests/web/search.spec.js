@@ -13,7 +13,7 @@ describe('[Web] Airbnb Search Suite', function () {
     homepage = new AirbnbHomepage(page);
     await homepage.webActions.startNetworkTracing();
     await homepage.webActions.startHarCapture();
-    await homepage.navigate(); // Initial navigation — tests chain from here
+    await homepage.navigate();
   });
 
   afterEach(async function () {

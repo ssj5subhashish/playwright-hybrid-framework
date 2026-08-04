@@ -48,33 +48,23 @@ describe('[Web] Airbnb Wishlist & Share Suite', function () {
     await homepage.searchDestination('Tokyo, Japan');
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();
-
-    // Click heart icon to save listing
     await searchResults.clickSaveListing(0);
-
-    // Verify that the login modal is displayed
     const isModalVisible = await auth.verifyAuthModalVisible();
     assert.isTrue(isModalVisible, 'Guest was not prompted to log in when saving a property');
   });
 
   it('[TC_02] [WishlistShare] [Web] Verify guest user can share a property listing', async function () {
-    await searchPage.searchDestination('Tokyo, Japan');
-    await searchPage.clickSearch();
-    await searchPage.verifyResultsPageLoaded();
-
-    // Open first listing in a new tab
+    await homepage.searchDestination('Tokyo, Japan');
+    await homepage.clickSearch();
+    await homepage.verifyResultsPageLoaded();
     const [detailPage] = await Promise.all([
       context.waitForEvent('page'),
       searchResults.openListing(0)
     ]);
     await detailPage.waitForLoadState();
-
-    // Find and click share button
     const shareBtn = detailPage.locator('button:has-text("Share"), button[data-testid="share-button"]').first();
     await shareBtn.click({ force: true });
     await detailPage.waitForTimeout(1000);
-
-    // Verify share overlay is visible
     const shareOverlay = await detailPage.locator('div[role="dialog"]:has-text("Share this place")').isVisible();
     assert.isTrue(shareOverlay, 'Share dialog did not appear');
     await detailPage.close();

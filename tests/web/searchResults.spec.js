@@ -21,7 +21,6 @@ describe('[Web] Airbnb Search Results Suite', function () {
     await homepage.clickSearch();
     const loaded = await homepage.verifyResultsPageLoaded();
 
-    // If Airbnb redirected to a locale domain, force navigate to search results directly
     if (!loaded || !page.url().includes('/s/')) {
       const domain = new URL(page.url()).origin;
       const searchUrl = `${domain}/s/Tokyo--Japan/homes?query=Tokyo%2C%20Japan`;
@@ -29,7 +28,6 @@ describe('[Web] Airbnb Search Results Suite', function () {
       await homepage.webActions.dismissBlockingOverlay();
       await page.waitForSelector('div[data-testid="card-container"]', { timeout: 20000 });
     }
-    // All tests chain from this search results page
   });
 
   afterEach(async function () {
@@ -57,14 +55,14 @@ describe('[Web] Airbnb Search Results Suite', function () {
   });
 
   it('[TC_02] [SearchResults] [Web] Verify guest user can switch between list and map view', async function () {
-    await searchResults.toggleMapView(); // Switch to Map
+    await searchResults.toggleMapView();
     const toggleBtnText = await searchResults.getMapToggleText();
     assert.isTrue(
       toggleBtnText.includes('list') || toggleBtnText.includes('List') ||
       toggleBtnText.includes('map') || toggleBtnText.includes('Map'),
       'Failed to toggle to map view'
     );
-    await searchResults.toggleMapView(); // Toggle back to List
+    await searchResults.toggleMapView();
     const firstTitle = await searchResults.getFirstListingTitle();
     assert.isTrue(firstTitle.length > 0, 'Failed to toggle back to list view successfully');
   });
