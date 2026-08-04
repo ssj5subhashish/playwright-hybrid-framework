@@ -6,7 +6,7 @@ class BrowserFactory {
   /**
    * Helper to launch raw Playwright browser
    */
-  async launch(browserType: string = config.browser): Promise<Browser> {
+  async launchRaw(browserType: string = config.browser): Promise<Browser> {
     const options = (browserOptions as any)[browserType] || browserOptions.chrome;
     const headless = process.env.HEADLESS !== undefined 
       ? process.env.HEADLESS !== 'false' 
@@ -29,14 +29,23 @@ class BrowserFactory {
   }
 
   /**
-   * Launch standard browser context (Web / WebLR)
+   * Helper to launch browser, context, and page
    */
-  async launchBrowser(url: string): Promise<[Page, Browser, BrowserContext]> {
-    const browser = await this.launch();
+  async launch(browserType: string = config.browser): Promise<[Page, Browser, BrowserContext]> {
+    const browser = await this.launchRaw(browserType);
     const context = await browser.newContext({
-      viewport: { width: 1600, height: 900 }
+      viewport: { width: 1600, height: 900 },
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     });
     const page = await context.newPage();
+    return [page, browser, context];
+  }
+
+  /**
+   * Launch standard browser context (Web / WebLR) and navigate to url
+   */
+  async launchBrowser(url: string): Promise<[Page, Browser, BrowserContext]> {
+    const [page, browser, context] = await this.launch();
     await page.goto(url);
     return [page, browser, context];
   }
@@ -45,7 +54,7 @@ class BrowserFactory {
    * Launch mobile emulated browser context (MWeb)
    */
   async launchMobileBrowser(url: string, deviceName: string = 'Pixel 5'): Promise<[Page, Browser, BrowserContext]> {
-    const browser = await this.launch();
+    const browser = await this.launchRaw();
     const phone = devices[deviceName];
     const context = await browser.newContext({
       ...phone

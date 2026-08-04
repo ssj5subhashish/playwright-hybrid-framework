@@ -72,23 +72,28 @@ class WebActions {
 
   /**
    * Dismiss any modal/overlay that is blocking UI interactions.
-   * Targets only the promo modal - does NOT disable pointer-events broadly
-   * to avoid breaking the search bar header.
+   * Waits for the promo dialog to appear, waits for the close button to be visible,
+   * clicks it to close, and checks if it is actually closed.
    */
-  async dismissBlockingOverlay() {
+  async dismissBlockingOverlay(timeout = 5000) {
     log.info('[WebActions] Attempting to dismiss blocking overlay...');
+    const dialog = this.page.locator('div[role="dialog"]').filter({
+      has: this.page.locator('button[aria-label="Close"]')
+    }).first();
     try {
-      await this.page.keyboard.press('Escape');
-      await this.page.waitForTimeout(400);
-      await this.page.evaluate(() => {
-        // Hide only the promo modal dialog (e.g. "Get 10% off your next stay")
-        // Do NOT disable pointer-events on fixed elements — that breaks the search header
-        document.querySelectorAll('[data-testid="modal-container"]').forEach(el => {
-          (el as HTMLElement).style.display = 'none';
-        });
-      });
-      await this.page.waitForTimeout(400);
-    } catch (e) { /* ignore */ }
+      log.info(`[WebActions] Waiting up to ${timeout}ms for the promo dialog to appear...`);
+      await dialog.waitFor({ state: 'visible', timeout });
+      log.info('[WebActions] Dialog appeared. Waiting for the close button to be visible...');
+      const closeBtn = dialog.locator('button[aria-label="Close"]').first();
+      await closeBtn.waitFor({ state: 'visible', timeout: 3000 });
+      log.info('[WebActions] Clicking the Close button...');
+      await closeBtn.click();
+      log.info('[WebActions] Verifying if the dialog is successfully closed...');
+      await dialog.waitFor({ state: 'hidden', timeout: 5000 });
+      log.info('[WebActions] Dialog is successfully closed.');
+    } catch (e) {
+      log.info(`[WebActions] No blocking overlay dialog was dismissed: ${(e as Error).message}`);
+    }
   }
 
   /**
@@ -151,7 +156,11 @@ class WebActions {
    */
   async startNetworkTracing() {
     log.info(`[WebActions] Starting Playwright Network tracing`);
-    await this.page.context().tracing.start({ screenshots: true, snapshots: true });
+    try {
+      await this.page.context().tracing.start({ screenshots: true, snapshots: true });
+    } catch (e) {
+      log.error(`[WebActions] Failed to start network tracing`, e);
+    }
   }
 
   /**
@@ -159,33 +168,65 @@ class WebActions {
    */
   async stopNetworkTracing(testName: string) {
     log.info(`[WebActions] Ending Playwright Network tracing`);
-    if (!fs.existsSync('trace')) {
-      fs.mkdirSync('trace', { recursive: true });
+    try {
+      const suite = process.env.TEST_SUITE || 'web';
+      const traceDir = `reports/${suite}/trace`;
+      if (!fs.existsSync(traceDir)) {
+        fs.mkdirSync(traceDir, { recursive: true });
+      }
+      const timestamp = Date.now();
+      const tracePath = `${traceDir}/${testName}_${timestamp}.zip`;
+      await this.page.context().tracing.stop({ path: tracePath });
+      log.info(`[WebActions] Trace saved to: ${tracePath}`);
+    } catch (e) {
+      log.error(`[WebActions] Failed to stop network tracing`, e);
     }
-    const tracePath = `trace/${testName}.zip`;
-    await this.page.context().tracing.stop({ path: tracePath });
-    log.info(`[WebActions] Trace saved to: ${tracePath}`);
   }
 
   /**
   * Start HAR Capture
   */
   async startHarCapture() {
-    log.info(`[WebActions] Starting HAR capture`);
-    await this.har.start();
+    if (config.browser === 'chrome') {
+      log.info(`[WebActions] Starting HAR capture`);
+      try {
+        await this.har.start();
+      } catch (e) {
+        log.error(`[WebActions] Failed to start HAR capture`, e);
+      }
+    }
   }
 
   /**
    * Stop HAR Capture and save the HAR file
    */
   async stopHarCapture(testName: string) {
-    log.info(`[WebActions] Ending HAR capture`);
-    if (!fs.existsSync('har')) {
-      fs.mkdirSync('har', { recursive: true });
+    if (config.browser === 'chrome') {
+      log.info(`[WebActions] Ending HAR capture`);
+      try {
+        const suite = process.env.TEST_SUITE || 'web';
+        const harDir = `reports/${suite}/har`;
+        if (!fs.existsSync(harDir)) {
+          fs.mkdirSync(harDir, { recursive: true });
+        }
+        const timestamp = Date.now();
+        const harPath = `${harDir}/${testName}_${timestamp}.har`;
+        await this.har.stop(harPath);
+        log.info(`[WebActions] HAR file saved to: ${harPath}`);
+      } catch (e) {
+        log.error(`[WebActions] Failed to stop HAR capture`, e);
+      }
     }
-    const harPath = `har/${testName}.har`;
-    await this.har.stop(harPath);
-    log.info(`[WebActions] HAR file saved to: ${harPath}`);
+  }
+
+  /**
+   * Generate Random Email
+   */
+  async generateRandomEmail(): Promise<string> {
+    log.info(`[WebActions] Generating random email`);
+    const timestamp = Date.now();
+    const email = `test_${timestamp}@example.com`;
+    return email;
   }
 }
 

@@ -31,6 +31,11 @@ on:
           - All
           - Web
           - MWeb
+      parallel_jobs:
+        description: 'Number of parallel jobs (set to 1 to run sequentially)'
+        required: true
+        default: '5'
+        type: string
 
 jobs:
   web-tests:
@@ -63,6 +68,7 @@ jobs:
           ENV: ${{ github.event.inputs.environment || 'qa' }}
           BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
           HEADLESS: 'true'
+          PARALLEL_JOBS: ${{ github.event.inputs.parallel_jobs || '5' }}
 
       - name: Upload Mochawesome HTML Reports
         uses: actions/upload-artifact@v6
@@ -71,6 +77,24 @@ jobs:
           name: web-mochawesome-reports
           path: reports/web
           retention-days: 7
+
+      - name: Upload Trace Files
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: web-local-traces
+          path: reports/web/trace
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload HAR Files
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: web-local-hars
+          path: reports/web/har
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
@@ -118,6 +142,7 @@ jobs:
           ENV: ${{ github.event.inputs.environment || 'qa' }}
           BROWSER: ${{ github.event.inputs.browser || 'chrome' }}
           HEADLESS: 'true'
+          PARALLEL_JOBS: ${{ github.event.inputs.parallel_jobs || '5' }}
 
       - name: Upload Mochawesome HTML Reports
         uses: actions/upload-artifact@v6
@@ -126,6 +151,24 @@ jobs:
           name: mweb-mochawesome-reports
           path: reports/mWeb
           retention-days: 7
+
+      - name: Upload Trace Files
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: mweb-local-traces
+          path: reports/mWeb/trace
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Upload HAR Files
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: mweb-local-hars
+          path: reports/mWeb/har
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v6
