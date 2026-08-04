@@ -22,14 +22,16 @@ describe('[MWeb] Airbnb Mobile Property Details Suite', function () {
     await homepage.navigate();
     await homepage.closeInstallApp();
     await homepage.searchDestination('Tokyo, Japan');
+    await homepage.selectDates(3, 7);
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();
 
     // Click on listing container to open details (on mobile it opens in the same tab or new)
     const list = page.locator('div[data-testid="card-container"]').first();
     await list.click({ force: true });
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(4000);
     propertyDetails = new AirbnbMobilePropertyDetails(page);
+    await propertyDetails.closeTranslateDialogIfVisible();
   });
 
   afterEach(async function () {
@@ -58,28 +60,40 @@ describe('[MWeb] Airbnb Mobile Property Details Suite', function () {
 
   it('[TC_02] [PropertyDetails] [MWeb] Verify guest user can browse property image gallery on mobile', async function () {
     await propertyDetails.openImageGallery();
+    const isCloseBtnVisible = await page.locator(propertyDetails.locators.GALLERY_CLOSE_BTN).first().isVisible();
+    assert.isTrue(isCloseBtnVisible, 'Gallery close button should be visible when gallery is open on mobile');
     await propertyDetails.closeImageGallery();
   });
 
   it('[TC_03] [PropertyDetails] [MWeb] Verify guest user can view property amenities on mobile', async function () {
     await propertyDetails.viewAmenities();
+    const isModalVisible = await page.locator('div[role="dialog"]').first().isVisible();
+    assert.isTrue(isModalVisible, 'Amenities modal should be visible after clicking show all amenities on mobile');
     await page.keyboard.press('Escape');
   });
 
   it('[TC_04] [PropertyDetails] [MWeb] Verify guest user can view availability calendar on mobile', async function () {
     await propertyDetails.viewAvailability();
+    const isVisible = await page.locator(propertyDetails.locators.CALENDAR_SECTION).first().isVisible();
+    assert.isTrue(isVisible, 'Calendar section should be visible on mobile');
   });
 
   it('[TC_05] [PropertyDetails] [MWeb] Verify guest user can view pricing breakdown on mobile', async function () {
     await propertyDetails.getPricingBreakdown();
+    const isReserveVisible = await page.locator(propertyDetails.locators.RESERVE_BTN).first().isVisible();
+    assert.isTrue(isReserveVisible, 'Reserve button should be visible in the pricing breakdown / booking section on mobile');
   });
 
   it('[TC_06] [PropertyDetails] [MWeb] Verify guest user can view host information on mobile', async function () {
     await propertyDetails.viewHostInformation();
+    const isVisible = await page.locator(propertyDetails.locators.HOST_INFO_SECTION).first().isVisible();
+    assert.isTrue(isVisible, 'Host information section should be visible on mobile');
   });
 
   it('[TC_07] [PropertyDetails] [MWeb] Verify guest user can read property reviews on mobile', async function () {
     await propertyDetails.readReviews();
+    const isModalVisible = await page.locator('div[role="dialog"]').first().isVisible();
+    assert.isTrue(isModalVisible, 'Reviews modal should be visible after clicking show all reviews on mobile');
     await page.keyboard.press('Escape');
   });
 });

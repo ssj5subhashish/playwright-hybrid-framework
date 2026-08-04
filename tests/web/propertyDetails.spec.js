@@ -32,6 +32,8 @@ describe('[Web] Airbnb Property Details Suite', function () {
     detailPage = newPage;
     await detailPage.waitForLoadState();
     propertyDetails = new AirbnbPropertyDetails(detailPage);
+    await propertyDetails.closeTranslateDialogIfVisible();
+    await propertyDetails.clickNextOnChooseYourApartmentDialogIfVisible();
   });
 
   afterEach(async function () {
@@ -60,31 +62,42 @@ describe('[Web] Airbnb Property Details Suite', function () {
   });
 
   it('[TC_02] [PropertyDetails] [Web] Verify guest user can browse property image gallery', async function () {
+    await propertyDetails.closeTranslateDialogIfVisible();
     await propertyDetails.openImageGallery();
-    // Verify it opened and we can close it
+    const isVisible = await propertyDetails.verifyGalleryHeading();
+    assert.isTrue(isVisible, 'Property image gallery heading should be visible');
     await propertyDetails.closeImageGallery();
   });
 
   it('[TC_03] [PropertyDetails] [Web] Verify guest user can view property amenities', async function () {
     await propertyDetails.viewAmenities();
-    // Escape standard full-screen amenities overlay if it opens
+    const isModalVisible = await detailPage.locator('div[role="dialog"]').first().isVisible();
+    assert.isTrue(isModalVisible, 'Amenities modal should be visible after clicking show all amenities');
     await detailPage.keyboard.press('Escape');
   });
 
   it('[TC_04] [PropertyDetails] [Web] Verify guest user can view availability calendar', async function () {
     await propertyDetails.viewAvailability();
+    const isVisible = await detailPage.locator(propertyDetails.locators.CALENDAR_SECTION).first().isVisible();
+    assert.isTrue(isVisible, 'Availability calendar section should be visible');
   });
 
   it('[TC_05] [PropertyDetails] [Web] Verify guest user can view pricing breakdown', async function () {
     await propertyDetails.getPricingBreakdown();
+    const isReserveVisible = await detailPage.locator(propertyDetails.locators.RESERVE_BTN).first().isVisible();
+    assert.isTrue(isReserveVisible, 'Reserve button should be visible in the pricing breakdown / booking section');
   });
 
   it('[TC_06] [PropertyDetails] [Web] Verify guest user can view host information', async function () {
     await propertyDetails.viewHostInformation();
+    const isVisible = await detailPage.locator(propertyDetails.locators.HOST_INFO_SECTION).first().isVisible();
+    assert.isTrue(isVisible, 'Host information section should be visible');
   });
 
   it('[TC_07] [PropertyDetails] [Web] Verify guest user can read property reviews', async function () {
     await propertyDetails.readReviews();
+    const isModalVisible = await detailPage.locator('div[role="dialog"]').first().isVisible();
+    assert.isTrue(isModalVisible, 'Reviews modal should be visible after clicking show all reviews');
     await detailPage.keyboard.press('Escape');
   });
 });

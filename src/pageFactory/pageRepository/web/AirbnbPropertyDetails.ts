@@ -13,8 +13,16 @@ class AirbnbPropertyDetails {
   }
 
   async openImageGallery() {
-    await this.webActions.forceClickElement(this.locators.GALLERY_TRIGGER_BTN);
-    await this.page.waitForTimeout(1000);
+    const btn = this.page.locator(this.locators.GALLERY_TRIGGER_BTN).first();
+    await btn.scrollIntoViewIfNeeded();
+    await btn.click();
+    await this.page.waitForTimeout(2000);
+  }
+
+  async verifyGalleryHeading() {
+    const headingVisible = await this.page.locator(this.locators.GALLERY_HEADING).first().isVisible();
+    const closeBtnVisible = await this.page.locator(this.locators.GALLERY_CLOSE_BTN).first().isVisible();
+    return headingVisible || closeBtnVisible;
   }
 
   async closeImageGallery() {
@@ -23,7 +31,7 @@ class AirbnbPropertyDetails {
   }
 
   async viewAmenities() {
-    await this.page.locator(this.locators.AMENITIES_SECTION).scrollIntoViewIfNeeded();
+    await this.page.locator(this.locators.AMENITIES_SECTION).first().scrollIntoViewIfNeeded();
     await this.page.waitForTimeout(500);
     if (await this.webActions.isElementVisible(this.locators.SHOW_ALL_AMENITIES_BTN)) {
       await this.webActions.forceClickElement(this.locators.SHOW_ALL_AMENITIES_BTN);
@@ -32,7 +40,7 @@ class AirbnbPropertyDetails {
   }
 
   async viewAvailability() {
-    await this.page.locator(this.locators.CALENDAR_SECTION).scrollIntoViewIfNeeded();
+    await this.page.locator(this.locators.CALENDAR_SECTION).first().scrollIntoViewIfNeeded();
     await this.page.waitForTimeout(1000);
   }
 
@@ -44,12 +52,12 @@ class AirbnbPropertyDetails {
   }
 
   async viewHostInformation() {
-    await this.page.locator(this.locators.HOST_INFO_SECTION).scrollIntoViewIfNeeded();
+    await this.page.locator(this.locators.HOST_INFO_SECTION).first().scrollIntoViewIfNeeded();
     await this.page.waitForTimeout(1000);
   }
 
   async readReviews() {
-    await this.page.locator(this.locators.REVIEWS_TRIGGER_BTN).scrollIntoViewIfNeeded();
+    await this.page.locator(this.locators.REVIEWS_TRIGGER_BTN).first().scrollIntoViewIfNeeded();
     await this.page.waitForTimeout(500);
     await this.webActions.forceClickElement(this.locators.REVIEWS_TRIGGER_BTN);
     await this.page.waitForTimeout(1000);
