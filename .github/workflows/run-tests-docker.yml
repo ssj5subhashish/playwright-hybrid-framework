@@ -31,6 +31,11 @@ on:
           - All
           - Web
           - MWeb
+      parallel_jobs:
+        description: 'Number of parallel jobs (set to 1 to run sequentially)'
+        required: true
+        default: '5'
+        type: string
 
 jobs:
   web-tests-docker:
@@ -52,6 +57,7 @@ jobs:
             -e BROWSER=${{ github.event.inputs.browser || 'chrome' }} \
             -e HEADLESS=true \
             -e TEST_SUITE=web \
+            -e PARALLEL_JOBS=${{ github.event.inputs.parallel_jobs || '5' }} \
             playwright-tests:latest
 
       - name: Copy Reports from Docker Container
@@ -120,6 +126,7 @@ jobs:
             -e BROWSER=${{ github.event.inputs.browser || 'chrome' }} \
             -e HEADLESS=true \
             -e TEST_SUITE=mWeb \
+            -e PARALLEL_JOBS=${{ github.event.inputs.parallel_jobs || '5' }} \
             playwright-tests:latest
 
       - name: Copy Reports from Docker Container
