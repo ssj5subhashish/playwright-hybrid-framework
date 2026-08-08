@@ -3,7 +3,7 @@ class AirbnbMobileHomepageObjects {
   MOBILE_SEARCH_BAR_TRIGGER = 'button[data-testid="search-bar-trigger"], button:has-text("Where to?"), button:has-text("Start your search"), [data-testid="search-input-field-query"]';
 
   // Mobile navigation and footer
-  HOME_LOGO = 'a[aria-label="Airbnb homepage"]';
+  HOME_LOGO = '//a[@href="/" and .//div[normalize-space()="Explore"]]';
   PROFILE_MENU_TRIGGER = 'a[data-testid="profile-icon"], button[aria-label="Log in"], a:has-text("Log in")';
 
   // Mobile App Install Banners
