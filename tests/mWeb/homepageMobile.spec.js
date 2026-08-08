@@ -44,7 +44,15 @@ describe('[MWeb] Airbnb Mobile Homepage Suite', function () {
     assert.isTrue(title.includes('Airbnb') || title.includes('Vacation Rentals'), 'Mobile homepage title does not match');
   });
 
-  it('[TC_02] [Homepage] [MWeb] Verify guest user can dismiss app install banner on mobile homepage', async function () {
+  it('[TC_02] [Homepage] [MWeb] Verify guest user can navigate using the homepage search on mobile', async function () {
+    await homepage.closeInstallApp();
+    await homepage.searchDestination('Tokyo, Japan');
+    await homepage.clickSearch();
+    const isResultsLoaded = await homepage.verifyResultsPageLoaded();
+    assert.isTrue(isResultsLoaded, 'Stays results failed to load from homepage search on mobile');
+  });
+
+  it('[TC_03] [Homepage] [MWeb] Verify guest user can dismiss app install banner on mobile homepage', async function () {
     await homepage.dismissInstallBanner();
   });
 });

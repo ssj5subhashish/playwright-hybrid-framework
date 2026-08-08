@@ -2,6 +2,7 @@ const BrowserFactory = require('../../src/browsers/BrowserFactory.ts');
 const AirbnbMobileHomepage = require('../../src/pageFactory/pageRepository/mWeb/AirbnbMobileHomepage.ts');
 const AirbnbMobileSearchResults = require('../../src/pageFactory/pageRepository/mWeb/AirbnbMobileSearchResults.ts');
 const AirbnbMobileAuth = require('../../src/pageFactory/pageRepository/mWeb/AirbnbMobileAuth.ts');
+const AirbnbMobilePropertyDetails = require('../../src/pageFactory/pageRepository/mWeb/AirbnbMobilePropertyDetails.ts');
 const { config } = require('../../src/config/config.ts');
 const { assert } = require('chai');
 const addContext = require('mochawesome/addContext');
@@ -63,15 +64,11 @@ describe('[MWeb] Airbnb Mobile Wishlist & Share Suite', function () {
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();
 
-    const list = page.locator('div[data-testid="card-container"]').first();
-    await list.click({ force: true });
-    await page.waitForTimeout(2000);
+    await searchResults.openListing(0);
 
-    const shareBtn = page.locator('button:has-text("Share"), button[data-testid="share-button"]').first();
-    await shareBtn.click({ force: true });
-    await page.waitForTimeout(1000);
-
-    const shareOverlay = await page.locator('div[role="dialog"]:has-text("Share this place")').first().isVisible();
+    const details = new AirbnbMobilePropertyDetails(page);
+    await details.closeTranslateDialogIfVisible();
+    const shareOverlay = await details.openShareDialog();
     assert.isTrue(shareOverlay, 'Share dialog did not appear on mobile');
   });
 });

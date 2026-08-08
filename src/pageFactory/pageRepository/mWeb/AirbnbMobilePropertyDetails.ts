@@ -71,15 +71,15 @@ class AirbnbMobilePropertyDetails {
   async openShareDialog(): Promise<boolean> {
     await this.webActions.forceClickElement(this.locators.SHARE_BTN);
     await this.page.waitForTimeout(1000);
-    return await this.page.locator('div[role="dialog"]:has-text("Share this place")').first().isVisible();
+    return await this.webActions.isElementVisible(this.locators.SHARE_DIALOG, 5000);
   }
 
-  /** Returns true if the login/auth prompt is visible (for guest reservation flows) */
   async verifyLoginPromptVisible(): Promise<boolean> {
-    return await this.page
-      .locator('input[id="email"], input[id="phoneNumber"], div[data-testid="modal-container"]')
-      .first()
-      .isVisible();
+    return await this.page.url().includes('/login') ||
+      await this.page
+        .locator(this.locators.LOGIN_INPUTS_MODAL)
+        .first()
+        .isVisible();
   }
 
   async getPropertyTitle(): Promise<string> {
@@ -87,13 +87,13 @@ class AirbnbMobilePropertyDetails {
   }
 
   async verifyTranslateDialog() {
-    return await this.page.locator('h1:has-text("Translation on"), div:has-text("Translation on")').first().isVisible();
+    return await this.page.locator(this.locators.TRANSLATE_DIALOG).first().isVisible();
   }
 
   async closeTranslateDialogIfVisible() {
     const isVisible = await this.verifyTranslateDialog();
     if (isVisible) {
-      await this.page.locator('button[aria-label="Close"]').first().click();
+      await this.page.locator(this.locators.TRANSLATE_CLOSE_BTN).first().click();
       await this.page.waitForTimeout(500);
     }
   }

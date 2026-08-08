@@ -39,15 +39,23 @@ describe('[MWeb] Airbnb Mobile Authentication Suite', function () {
     }
   });
 
-  it('[TC_01] [Authentication] [MWeb] Verify guest user can open login modal on mobile', async function () {
+  it('[TC_01] [Authentication] [MWeb] Verify guest user can open Login or Signup modal on mobile', async function () {
     await homepage.openUserMenu();
     const isModalVisible = await auth.verifyAuthModalVisible();
     assert.isTrue(isModalVisible, 'Login modal did not appear on mobile');
   });
 
-  it('[TC_02] [Authentication] [MWeb] Verify guest user can close authentication modal on mobile', async function () {
+  it('[TC_02] [Authentication] [MWeb] Verify guest user can use fresh email to signup on mobile', async function () {
+    const email = await auth.webActions.generateRandomEmail();
+    await auth.enterEmail(email);
+    await auth.clickContinue();
+    const isSecurityOrOTPModalVisible = await auth.verifySecurityOrOTPModalVisible();
+    assert.isTrue(isSecurityOrOTPModalVisible, 'Security or OTP modal did not appear on mobile');
+  });
+
+  it('[TC_03] [Authentication] [MWeb] Verify guest user can close authentication modal on mobile', async function () {
     await auth.closeAuthModal();
-    isModalVisible = await auth.verifyAuthModalVisible();
-    assert.isFalse(isModalVisible, 'Login modal did not close successfully on mobile');
+    const isModalVisible = await auth.verifyAuthModalVisible();
+    assert.isFalse(isModalVisible, 'Auth modal did not close successfully on mobile');
   });
 });

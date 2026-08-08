@@ -49,13 +49,9 @@ describe('[MWeb] Airbnb Mobile Navigation Suite', function () {
     let isResultsLoaded = await homepage.verifyResultsPageLoaded();
     assert.isTrue(isResultsLoaded, 'Failed to transition to search page on mobile');
 
-    const homeLogo = page.locator('a[aria-label="Airbnb homepage"]').first();
-    if (await homeLogo.isVisible()) {
-      await homeLogo.click({ force: true });
-      await page.waitForTimeout(2000);
-      const title = await page.title();
-      assert.isTrue(title.includes('Airbnb') || title.includes('Vacation Rentals'), 'Failed to return to Homepage on mobile');
-    }
+    await homepage.clickLogoToHome();
+    const title = await page.title();
+    assert.isTrue(title.includes('Airbnb') || title.includes('Vacation Rentals'), 'Failed to return to Homepage on mobile');
   });
 
   it('[TC_02] [Navigation] [MWeb] Verify guest user can use browser back navigation on mobile', async function () {

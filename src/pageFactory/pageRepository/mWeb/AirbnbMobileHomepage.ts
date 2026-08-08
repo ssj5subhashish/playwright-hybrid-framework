@@ -36,10 +36,12 @@ class AirbnbMobileHomepage {
   }
 
   async changeCurrency() {
-    await this.webActions.forceClickElement(this.locators.LANGUAGE_PICKER_TRIGGER);
+    await this.webActions.forceClickElement(this.locators.CURRENCY_PICKER_TRIGGER);
     await this.page.waitForTimeout(1000);
-    await this.webActions.forceClickElement(this.locators.CURRENCY_TAB);
-    await this.page.waitForTimeout(500);
+    if (await this.webActions.isElementVisible(this.locators.CURRENCY_TAB)) {
+      await this.webActions.forceClickElement(this.locators.CURRENCY_TAB);
+      await this.page.waitForTimeout(500);
+    }
     if (await this.webActions.isElementVisible(this.locators.CURRENCY_OPTION_USD)) {
       await this.webActions.forceClickElement(this.locators.CURRENCY_OPTION_USD);
     } else {
@@ -123,6 +125,22 @@ class AirbnbMobileHomepage {
   }
 
   async clickSearch() {
+    for (let i = 0; i < 3; i++) {
+      const nextBtn = this.page.locator(this.locators.NEXT_STEP_BTN).first();
+      const searchBtn = this.page.locator(this.locators.MOBILE_SEARCH_SUBMIT_BTN).first();
+      
+      if (await searchBtn.isVisible()) {
+        await this.webActions.forceClickElement(this.locators.MOBILE_SEARCH_SUBMIT_BTN);
+        return;
+      }
+      
+      if (await nextBtn.isVisible()) {
+        await nextBtn.click({ force: true });
+        await this.page.waitForTimeout(1000);
+      } else {
+        break;
+      }
+    }
     await this.webActions.forceClickElement(this.locators.MOBILE_SEARCH_SUBMIT_BTN);
   }
 
@@ -158,6 +176,20 @@ class AirbnbMobileHomepage {
     if (await this.webActions.isElementVisible(this.locators.CLOSE_INSTALL_APP_BANNER)) {
       await this.webActions.forceClickElement(this.locators.CLOSE_INSTALL_APP_BANNER);
     }
+  }
+
+  async clickLogoToHome() {
+    await this.webActions.forceClickElement(this.locators.HOME_LOGO);
+    await this.page.waitForTimeout(2000);
+  }
+
+  async selectFlexibleDates() {
+    await this.page.evaluate(() => {
+      const tabs = Array.from(document.querySelectorAll('button, [role="tab"]'));
+      const flexTab = tabs.find(el => el.textContent && el.textContent.toLowerCase().includes('flexible'));
+      if (flexTab) (flexTab as HTMLElement).click();
+    });
+    await this.page.waitForTimeout(500);
   }
 }
 

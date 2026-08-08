@@ -26,10 +26,7 @@ describe('[MWeb] Airbnb Mobile Property Details Suite', function () {
     await homepage.clickSearch();
     await homepage.verifyResultsPageLoaded();
 
-    // Click on listing container to open details (on mobile it opens in the same tab or new)
-    const list = page.locator('div[data-testid="card-container"]').first();
-    await list.click({ force: true });
-    await page.waitForTimeout(4000);
+    await searchResults.openListing(0);
     propertyDetails = new AirbnbMobilePropertyDetails(page);
     await propertyDetails.closeTranslateDialogIfVisible();
   });
@@ -67,7 +64,7 @@ describe('[MWeb] Airbnb Mobile Property Details Suite', function () {
 
   it('[TC_03] [PropertyDetails] [MWeb] Verify guest user can view property amenities on mobile', async function () {
     await propertyDetails.viewAmenities();
-    const isModalVisible = await page.locator('div[role="dialog"]').first().isVisible();
+    const isModalVisible = await page.locator(propertyDetails.locators.DIALOG_MODAL).first().isVisible();
     assert.isTrue(isModalVisible, 'Amenities modal should be visible after clicking show all amenities on mobile');
     await page.keyboard.press('Escape');
   });
@@ -92,7 +89,7 @@ describe('[MWeb] Airbnb Mobile Property Details Suite', function () {
 
   it('[TC_07] [PropertyDetails] [MWeb] Verify guest user can read property reviews on mobile', async function () {
     await propertyDetails.readReviews();
-    const isModalVisible = await page.locator('div[role="dialog"]').first().isVisible();
+    const isModalVisible = await page.locator(propertyDetails.locators.DIALOG_MODAL).first().isVisible();
     assert.isTrue(isModalVisible, 'Reviews modal should be visible after clicking show all reviews on mobile');
     await page.keyboard.press('Escape');
   });

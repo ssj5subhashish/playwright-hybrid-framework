@@ -11,7 +11,8 @@ class AirbnbMobileHomepageObjects {
   USE_APP_BANNER_TRIGGER = 'a:has-text("Use app"), a[data-testid="use-app-button"]';
 
   // Localization selectors
-  LANGUAGE_PICKER_TRIGGER = 'button[aria-label="Choose a language and currency"]';
+  LANGUAGE_PICKER_TRIGGER = 'button[aria-label="Choose a language"]';
+  CURRENCY_PICKER_TRIGGER = 'button[aria-label="Choose a currency"]';
   LANGUAGE_OPTION_EN = 'button[data-testid="language-selector-item-en"]';
   CURRENCY_TAB = 'button[role="tab"]:has-text("Currency")';
   CURRENCY_OPTION_USD = 'button[data-testid="currency-selector-item-USD"], a:has-text("USD")';

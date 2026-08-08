@@ -88,6 +88,10 @@ class AirbnbMobileSearchResults {
   async getFirstListingTitle(): Promise<string> {
     return await this.webActions.getText(this.locators.LISTING_TITLES);
   }
+
+  async getMapToggleText(): Promise<string> {
+    return await this.webActions.getText(this.locators.MAP_TOGGLE_BTN);
+  }
 }
 
 export = AirbnbMobileSearchResults;
